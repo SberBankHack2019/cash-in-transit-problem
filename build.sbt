@@ -18,6 +18,17 @@ lazy val all = project
         "org.scalatest" %% "scalatest" % "3.0.8" % "test"
       )
     )
+  ).aggregate(app)
+
+lazy val app = project
+  .in(file("app"))
+  .settings(
+    defaultSettings ++ Seq(
+      libraryDependencies ++= Seq(
+        "dev.zio" %% "zio" % "1.0.0-RC11-1",
+        "org.scalatest" %% "scalatest" % "3.0.8" % "test"
+      )
+    )
   )
 
 resolvers ++= Seq(
