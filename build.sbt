@@ -9,27 +9,65 @@ lazy val all = project
   .in(file("."))
   .settings(
     defaultSettings ++ Seq(
-      organization := "sberhack.fun",
+      organization := "com.sberhack.fun",
       name := "cash-in-transit-problem",
       homepage := Some(url("https://github.com/SberBankHack2019/cash-in-transit-problem")),
       version := "1.0.0",
       libraryDependencies ++= Seq(
-        "dev.zio" %% "zio" % "1.0.0-RC11-1",
-        "org.scalatest" %% "scalatest" % "3.0.8" % "test"
+        
       )
     )
-  ).aggregate(app)
+  ).aggregate(app, graph, visualisation, algorithm, world)
 
 lazy val app = project
   .in(file("app"))
   .settings(
     defaultSettings ++ Seq(
       libraryDependencies ++= Seq(
-        "dev.zio" %% "zio" % "1.0.0-RC11-1",
-        "org.scalatest" %% "scalatest" % "3.0.8" % "test"
+        
+      )
+    )
+  ).dependsOn(world)
+
+lazy val graph = project
+  .in(file("graph"))
+  .settings(
+    defaultSettings ++ Seq(
+      libraryDependencies ++= Seq(
+        "org.scala-graph" %% "graph-core" % "1.13.0"
       )
     )
   )
+
+lazy val visualisation = project
+  .in(file("visualisation"))
+  .settings(
+    defaultSettings ++ Seq(
+      libraryDependencies ++= Seq(
+        
+      )
+    )
+  ).dependsOn(graph)
+
+lazy val algorithm = project
+  .in(file("algorithm"))
+  .settings(
+    defaultSettings ++ Seq(
+      libraryDependencies ++= Seq(
+        
+      )
+    )
+  ).dependsOn(graph, visualisation)
+
+lazy val world = project
+  .in(file("world"))
+  .settings(
+    defaultSettings ++ Seq(
+      libraryDependencies ++= Seq(
+        
+      )
+    )
+  ).dependsOn(graph, visualisation, algorithm)
 
 resolvers ++= Seq(
   Resolver.sbtPluginRepo("releases"),
@@ -51,6 +89,11 @@ lazy val defaultSettings = Seq(
     "-Ywarn-unused:imports",
     "-Ywarn-unused:privates",
     "-Yrangepos"
+  ),
+
+  libraryDependencies ++= Seq(
+    "dev.zio" %% "zio" % "1.0.0-RC11-1",
+    "org.scalatest" %% "scalatest" % "3.0.8" % "test"    
   )
 
 )
