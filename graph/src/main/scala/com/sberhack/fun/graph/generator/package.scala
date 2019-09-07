@@ -1,6 +1,6 @@
 package com.sberhack.fun.graph
 
-import com.sberhack.fun.graph.struct.VSP
+import com.sberhack.fun.graph.vertex.BankBuilding
 import com.sberhack.fun.graph.utils.{rnd, roundDouble}
 import com.sberhack.fun.graph.configuration.config
 import scalax.collection.Graph
@@ -10,11 +10,14 @@ import scalax.collection.edge.WUnDiEdge
 package object generator {
 
   private[generator] def distance = roundDouble(
-    rnd.nextDouble(config.distance.minDistance, config.distance.maxDistance),
-    config.distance.precision
+    rnd.nextDouble(config.vertex.vsp.distance.minDistance, config.vertex.vsp.distance.maxDistance),
+    config.vertex.vsp.distance.precision
   )
 
   /* Сгенерировать граф, где вершины будут идти одна за другой вот так: н-н-н-н-н */
-  def genLinkedSberGraph(size: Int): Graph[VSP, WUnDiEdge] = SimpleLinkedGraph.genGraph(size)
+  def genLinkedSberGraph(size: Int): Graph[BankBuilding, WUnDiEdge] = SimpleLinkedGraph.genGraph(size)
+
+  /* Сгененировать граф случайным образом*/
+  def genRandomGraph(size: Int): Graph[BankBuilding, WUnDiEdge] = RandomGraph.genGraph(size)
 
 }

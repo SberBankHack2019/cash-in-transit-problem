@@ -6,5 +6,6 @@ private[configuration] case class VSPConfig(
                                              minPickupTime: Double,
                                              maxPickupTime: Double,
                                              cashPrecision: Int,
-                                             timePrecision: Int
+                                             timePrecision: Int,
+                                             distance: DistanceConfig
                                            )

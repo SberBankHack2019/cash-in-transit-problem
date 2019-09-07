@@ -5,7 +5,7 @@ import com.sberhack.fun.graph.generator._
 
 object Main extends App{
 
-  saveDotFile("attempt1", genLinkedSberGraph(10).toDotPredef)
+  saveDotFile("attempt2", genLinkedSberGraph(15).toDotConfigured)
 
 }
 

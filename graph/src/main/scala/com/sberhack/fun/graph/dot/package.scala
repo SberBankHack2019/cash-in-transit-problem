@@ -1,5 +1,7 @@
 package com.sberhack.fun.graph
 
+import com.sberhack.fun.graph.configuration.config
+import com.sberhack.fun.graph.vertex.BankBuilding
 import scalax.collection.Graph
 import scalax.collection.edge.WUnDiEdge
 import scalax.collection.io.dot.{DotAttr, DotAttrStmt, DotEdgeStmt, DotGraph, DotRootGraph, Elem, implicits}
@@ -8,23 +10,25 @@ import implicits._
 
 package object dot {
 
-  implicit private[graph] class GraphToDot[T](graph: Graph[T, WUnDiEdge]) {
+  private val graphName = config.dot.graphName
 
-    private val graphName = "SberbankVSPmap"
+  private val nodeShapeDotConf = DotAttrStmt(Elem.node, List(DotAttr("shape",  config.dot.nodeShape)))
+
+  implicit private[graph] class GraphToDot(graph: Graph[BankBuilding, WUnDiEdge]) {
 
     private val dotRoot = DotRootGraph(directed = false,
       id = Some(graphName),
-      attrStmts = List(DotAttrStmt(Elem.node, List(DotAttr("shape", "circle")))),
+      attrStmts = List(nodeShapeDotConf),
     )
 
-    private def edgeTransformer(innerEdge: Graph[T, WUnDiEdge]#EdgeT):
+    private def edgeTransformer(innerEdge: Graph[BankBuilding, WUnDiEdge]#EdgeT):
       Option[(DotGraph, DotEdgeStmt)] = innerEdge.edge match {
         case WUnDiEdge(source, target, weight) => Some(
           (dotRoot, DotEdgeStmt(source.toString, target.toString, Seq(DotAttr("label", weight.toString))))
       )
     }
 
-    def toDotPredef: String = graph.toDot(dotRoot, edgeTransformer)
+    def toDotConfigured: String = graph.toDot(dotRoot, edgeTransformer)
 
   }
 

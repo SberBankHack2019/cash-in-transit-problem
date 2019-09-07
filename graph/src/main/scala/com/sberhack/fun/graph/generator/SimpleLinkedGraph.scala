@@ -1,16 +1,18 @@
 package com.sberhack.fun.graph.generator
-import com.sberhack.fun.graph.struct.{VSP, createVSP}
+
+import com.sberhack.fun.graph.vertex.{BankBuilding, Vault, createVSP}
 import scalax.collection.Graph
 import scalax.collection.edge.WUnDiEdge
 import scalax.collection.edge.Implicits._
 
 private[generator] object SimpleLinkedGraph extends GraphGenerator{
-  override def genGraph(size: Int): Graph[VSP, WUnDiEdge] = {
+  override def genGraph(size: Int): Graph[BankBuilding, WUnDiEdge] = {
 
-    var k: VSP = createVSP
-    var l: VSP = createVSP
+    var k: BankBuilding = Vault("Player1")
+    var l: BankBuilding = Vault("Player1")
 
-    Graph.fill[VSP, WUnDiEdge](size)( { k = l; l = createVSP; (k ~% l)(distance) })
+    // Маловероятно, но может содержать дубли
+    Graph.fill[BankBuilding, WUnDiEdge](size)( { k = l; l = createVSP; (k ~% l)(distance) })
 
   }
 }
