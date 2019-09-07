@@ -1,23 +1,29 @@
 package com.sberhack.fun.graph
 
-import com.sberhack.fun.graph.utils.rnd
+import com.sberhack.fun.graph.utils.{rnd, roundDouble}
 import com.sberhack.fun.graph.configuration.config
 
 package object struct {
 
+  private def cashPrecision = config.vsp.cashPrecision
+  private def timePrecision = config.vsp.cashPrecision
+  private def vspMinCash = roundDouble(config.vsp.minCash, cashPrecision)
+  private def vspMaxCash = roundDouble(config.vsp.maxCash, cashPrecision)
+  private def vspMinTime = roundDouble(config.vsp.minPickupTime, timePrecision)
+  private def vspMaxTime = roundDouble(config.vsp.maxPickupTime, timePrecision)
 
   def createVSP: VSP = createVSP(
-    (config.vsp.minValue, config.vsp.maxValue),
-    (config.vsp.minPickupTime, config.vsp.maxPickupTime)
+    (vspMinCash, vspMaxCash),
+    (vspMinTime, vspMaxTime)
   )
 
   private def createVSP(
-                 cashBounds: (Long, Long),
-                 timeBounds: (Long, Long)
+                 cashBounds: (Double, Double),
+                 timeBounds: (Double, Double)
                ): VSP =
     VSP(
-      rnd.nextLong(cashBounds._1, cashBounds._2),
-      rnd.nextLong(timeBounds._1, timeBounds._2)
+      roundDouble(rnd.nextDouble(cashBounds._1, cashBounds._2), cashPrecision),
+      roundDouble(rnd.nextDouble(timeBounds._1, timeBounds._2), timePrecision)
     )
 
 

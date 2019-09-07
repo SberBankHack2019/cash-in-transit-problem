@@ -1,8 +1,10 @@
 package com.sberhack.fun.graph.configuration
 
 private[configuration] case class VSPConfig(
-                                             minValue: Long,
-                                             maxValue: Long,
-                                             minPickupTime: Long,
-                                             maxPickupTime: Long
+                                             minCash: Double,
+                                             maxCash: Double,
+                                             minPickupTime: Double,
+                                             maxPickupTime: Double,
+                                             cashPrecision: Int,
+                                             timePrecision: Int
                                            )
