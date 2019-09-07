@@ -5,6 +5,10 @@ lazy val scalaVersion_2_13 = "2.13.0-RC3"
 lazy val scalaVersion_2_12 = "2.12.8"
 lazy val scalaVersion_2_11 = "2.11.12"
 
+lazy val scalaGraphVersion = "1.13.0"
+lazy val scalaGraphDotVersion = "1.12.1"
+lazy val pureConfigVersion = "0.11.1"
+
 lazy val all = project
   .in(file("."))
   .settings(
@@ -34,7 +38,9 @@ lazy val graph = project
   .settings(
     defaultSettings ++ Seq(
       libraryDependencies ++= Seq(
-        "org.scala-graph" %% "graph-core" % "1.13.0"
+        "org.scala-graph" %% "graph-core" % scalaGraphVersion,
+        "org.scala-graph" %% "graph-dot" % scalaGraphDotVersion,
+        "com.github.pureconfig" %% "pureconfig" % pureConfigVersion
       )
     )
   )
