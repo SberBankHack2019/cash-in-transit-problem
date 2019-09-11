@@ -39,6 +39,7 @@ lazy val graph = project
     defaultSettings ++ Seq(
       libraryDependencies ++= Seq(
         "org.scala-graph" %% "graph-core" % scalaGraphVersion,
+        "org.scala-graph" %% "graph-constrained" % scalaGraphVersion,
         "org.scala-graph" %% "graph-dot" % scalaGraphDotVersion,
         "com.github.pureconfig" %% "pureconfig" % pureConfigVersion
       )

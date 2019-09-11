@@ -17,7 +17,9 @@ package object generator {
   /* Сгенерировать граф, где вершины будут идти одна за другой вот так: н-н-н-н-н */
   def genLinkedSberGraph(size: Int): Graph[BankBuilding, WUnDiEdge] = SimpleLinkedGraph.genGraph(size)
 
-  /* Сгененировать граф случайным образом*/
-  def genRandomGraph(size: Int): Graph[BankBuilding, WUnDiEdge] = RandomGraph.genGraph(size)
+  /* Сгененировать случайный граф
+   * где условие на минимальное максимальное количество нод может не выполняться
+   * */
+  def genSimpleRandomGraph(size: Int): Graph[BankBuilding, WUnDiEdge] = SimpleRandomGraph.genGraph(size)
 
 }
