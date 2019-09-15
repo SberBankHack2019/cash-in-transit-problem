@@ -1,10 +1,12 @@
+#!/usr/bin/env bash
+
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 dot_file_name=$1
 
 output_format=$2
 
-[[ -z $output_format ]] && output_format="png"
+[[ -z ${output_format} ]] && output_format="png"
 
 # dot - вызов graphviz из командной строки
 
