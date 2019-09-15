@@ -1,6 +1,7 @@
 package com.sberhack.fun.graph
 
 import java.io.{File, PrintWriter}
+import scala.sys.process.Process
 import com.sberhack.fun.graph.configuration.config
 import com.sberhack.fun.graph.vertex.BankBuilding
 import scalax.collection.Graph
@@ -48,5 +49,44 @@ package object dot {
     }
   }
 
+  private[graph] def echo(message: String): Unit = {
+    val currentTime: String = "date \"+%Y-%m-%d %H:%M:%S.%N\""
+
+    Process(s"echo [TIME] $$( $currentTime ) [INFO] $message").run()
+  }
+
+  private[graph] def prettyEcho(message: String): Unit = {
+    Process("echo ------------------------------------").run()
+    echo(message)
+    Process("echo ------------------------------------").run()
+  }
+
+  private[graph] def exec(shFullPathName: String, shArgs: List[String]): Unit = {
+    echo(s"exec $shFullPathName with Args: ${shArgs.mkString(",")}")
+    Process(s"$shFullPathName ${shArgs.mkString(" ")}").run()
+  }
+
+  private[graph] def createPngFromDotFile(fileName: String,
+                                          shFileName: String,
+                                          shFileArgs: List[String]): Unit = {
+    val dotFileName = s"$fileName.dot"
+    val dotFilePath = "graph/src/main/generated/dot"
+
+    val pngFileName = s"$fileName.png"
+    val pngFilePath = "graph/src/main/generated/png"
+    val dotFilePathF = new File(pngFilePath)
+
+    val shFileName = s"$shFileName.sh"
+    val shFilePath = "graph/src/main/generated"
+
+    if(!dotFilePathF.exists()){
+      dotFilePathF.mkdir()
+    }
+
+    prettyEcho("***Creating .PNG image from .DOT file***")
+    echo(s"Full .DOT file PathName: $dotFilePath/$dotFileName")
+    echo(s"Full .PNG file PathName: $pngFilePath/$pngFileName")
+    exec(s"$shFilePath/shFileName", shFileArgs)
+  }
 
 }
