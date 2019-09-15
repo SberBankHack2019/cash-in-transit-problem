@@ -1,5 +1,6 @@
 package com.sberhack.fun.graph
 
+import java.io.{File, PrintWriter}
 import com.sberhack.fun.graph.configuration.config
 import com.sberhack.fun.graph.vertex.BankBuilding
 import scalax.collection.Graph
@@ -33,8 +34,18 @@ package object dot {
   }
 
   private[graph] def saveDotFile(fileName: String, dot: String): Unit = {
-    import java.io.PrintWriter
-    new PrintWriter(s"graph/src/main/generated/dot/$fileName.dot") { write(dot); close() }
+    val dotFileName = s"$fileName.dot"
+    val dotFilePath = "graph/src/main/generated/dot"
+    val dotFilePathF = new File(dotFilePath)
+
+    if(!dotFilePathF.exists()){
+      dotFilePathF.mkdir()
+    }
+
+    new PrintWriter(s"$dotFilePath/$dotFileName") {
+      write(dot)
+      close()
+    }
   }
 
 
