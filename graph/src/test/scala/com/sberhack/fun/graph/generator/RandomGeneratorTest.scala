@@ -1,14 +1,12 @@
 package com.sberhack.fun.graph.generator
 
-import com.sberhack.fun.graph.generator.SimpleRandomGraph.{maxConnections, minConnections}
-import com.sberhack.fun.graph.utils.rnd
-import org.scalatest.{FreeSpec, Matchers}
 import com.sberhack.fun.graph.vertex.{BankBuilding, VSP, createVSP}
+import org.scalatest.{FreeSpec, Matchers}
 import scalax.collection.constrained
 import scalax.collection.constrained.Config
-import scalax.collection.edge.WUnDiEdge
-import scalax.collection.edge.Implicits._
 import scalax.collection.constrained.constraints.Connected
+import scalax.collection.edge.Implicits._
+import scalax.collection.edge.WUnDiEdge
 
 import scala.collection.immutable
 
