@@ -48,6 +48,10 @@ package object generator {
     ???
   }
 
+  def updateGraph(cars: Seq[Car]): Graph[BankNode, WUnDiEdge] = {
+    ???
+  }
+
   def getMaybeJam(route: EdgeRoute, traffic: Traffic): Option[Double] = {
     traffic.traffic.find(edge => edge.a == route.a & edge.b == route.b).map(_.jam.toDouble)
   }

@@ -1,8 +1,9 @@
 package com.sberhack.fun.world
 
-import com.sberhack.fun.car.{Car, CarConfig}
+import com.sberhack.fun.car.{Car, CarConfig, CarNextMove}
 import com.sberhack.fun.graph.generator._
-import com.sberhack.fun.struct.responses.{GameConfig, Points, Routes, Traffic}
+import com.sberhack.fun.struct.responses.{DestinationPoint, GameConfig, Points, Routes, Traffic}
+import com.sberhack.fun.alg.Algorithm.calculateNextActions
 
 object World {
   val defaultCapacity = 50
@@ -22,17 +23,20 @@ object World {
     worldStructure = structure.World(worldName, config.token, config.level, worldGraph, cars)
   }
 
-  def updateTraffic(traffic: Traffic) = {
+  def update(traffic: Traffic) = {
     ???
     //val worldGraph = updateGraph(traffic)
     //worldStructure = worldStructure.copy(traffic=traffic)
   }
 
-  def updatePoints(points: Points) = {
-    ???
-    /*val cars: Seq[Car] = calculateNextActions(worldStructure)
-    val worldGraph = updateGraph(points)
-    worldStructure = worldStructure.copy(world=worldGraph)*/
+  def update(dp: DestinationPoint) = {
+    val updatedCar = Car(dp.car, dp.carsum, CarConfig().cashLimitDefault, dp.point, None)
+    val cars = worldStructure.cars.filter(_.name != dp.car) :+ updatedCar
+
+    nextActions = calculateNextActions(worldStructure)
+
+    val worldGraph = updateGraph(cars)
+    worldStructure = worldStructure.copy(world=worldGraph)
 
   }
 
