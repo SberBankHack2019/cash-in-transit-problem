@@ -1,3 +1,9 @@
 package com.sberhack.fun.graph.node
 
-case class VaultData ()
+import com.sberhack.fun.car.Car
+
+case class VaultData (
+                       id: Long,
+                       money: Double,
+                       cars: Seq[Car]
+                     )
