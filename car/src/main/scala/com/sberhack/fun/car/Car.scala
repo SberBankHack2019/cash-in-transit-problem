@@ -1,4 +1,4 @@
-package com.sberhack.fun.alg.structure
+package com.sberhack.fun.car
 
 case class Car(
                 name: String,
@@ -7,6 +7,7 @@ case class Car(
                 currentNodeId: Long,
                 nextMove: Option[CarNextMove]
               ) {
+
   override def toString: String =
     s"""(Car \"$name\"
        | cash: $cash

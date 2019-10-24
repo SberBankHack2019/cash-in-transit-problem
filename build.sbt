@@ -73,7 +73,7 @@ lazy val algorithm = project
 
       )
     )
-  ).dependsOn(graph, visualisation)
+  ).dependsOn(graph, visualisation, world)
 
 lazy val world = project
   .in(file("world"))
@@ -83,7 +83,17 @@ lazy val world = project
 
       )
     )
-  ).dependsOn(graph, visualisation, algorithm)
+  ).dependsOn(graph, visualisation, car)
+
+lazy val car = project
+  .in(file("car"))
+  .settings(
+    defaultSettings ++ Seq(
+      libraryDependencies ++= Seq(
+
+      )
+    )
+  ).dependsOn()
 
 lazy val struct = project
   .in(file("struct"))
