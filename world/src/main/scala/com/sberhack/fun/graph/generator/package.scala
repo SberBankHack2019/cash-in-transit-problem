@@ -56,7 +56,7 @@ package object generator {
     ???
   }
 
-  def updateGraph(graph: Graph[BankNode, WUnDiEdge], cars: Seq[Car]): Graph[BankNode, WUnDiEdge] = {
+  def updateGraph(graph: Graph[BankNode, WUnDiEdge], car: Car): Graph[BankNode, WUnDiEdge] = {
     ???
   }
 

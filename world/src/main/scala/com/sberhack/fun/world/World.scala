@@ -34,7 +34,7 @@ object World {
 
     nextActions = calculateNextActions(worldStructure)
 
-    val worldGraph = updateGraph(worldStructure.world, cars)
+    val worldGraph = updateGraph(worldStructure.world, updatedCar)
     worldStructure = worldStructure.copy(world=worldGraph, cars=cars)
   }
 
