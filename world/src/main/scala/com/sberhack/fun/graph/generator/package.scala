@@ -52,7 +52,7 @@ package object generator {
     ???
   }
 
-  def updateGraph(graph: Graph[BankNode, WUnDiEdge], traffic: Traffic): Graph[BankNode, WUnDiEdge] = {
+  def updateGraph(graph: Graph[BankNode, WUnDiEdge], routes: Routes, traffic: Traffic): Graph[BankNode, WUnDiEdge] = {
     ???
   }
 

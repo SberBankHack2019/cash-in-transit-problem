@@ -10,6 +10,7 @@ object World {
   val worldName = "My Shiny World"
 
   var worldStructure: structure.World = _
+  var worldRoutes: Routes = _
   var nextActions: Seq[Car] = _
 
   def create(config: GameConfig,
@@ -17,6 +18,7 @@ object World {
              routes: Routes,
              traffic: Traffic
              ): Unit = {
+    worldRoutes = routes
     val carConfig = CarConfig()
     val cars: Seq[Car] = config.cars.map(Car(_, 0, carConfig.cashLimitDefault, 0, None))
     val worldGraph = createGraph(config, cars, points, routes, traffic)
@@ -24,7 +26,7 @@ object World {
   }
 
   def update(traffic: Traffic) = {
-    val worldGraph = updateGraph(worldStructure.world, traffic)
+    val worldGraph = updateGraph(worldStructure.world, worldRoutes, traffic)
     worldStructure = worldStructure.copy(world=worldGraph)
   }
 
