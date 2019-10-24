@@ -1,14 +1,15 @@
 package com.sberhack.fun.graph.generator
 
 import com.sberhack.fun.graph.configuration.config
-import com.sberhack.fun.graph.vertex.{BankBuilding, VSP, Vault, createVSP}
 import com.sberhack.fun.graph.utils.rnd
-import scalax.collection.constrained.{Config, Graph}
+import com.sberhack.fun.graph.vertex.{BankBuilding, VSP, Vault, createVSP}
 import scalax.collection.constrained
-import scalax.collection.edge.WUnDiEdge
-import scalax.collection.edge.Implicits._
 import scalax.collection.constrained.constraints.Connected
+import scalax.collection.constrained.{Config, Graph}
+import scalax.collection.edge.Implicits._
+import scalax.collection.edge.WUnDiEdge
 
+import scala.annotation.tailrec
 import scala.collection.immutable
 
 private[generator] object SimpleRandomGraph extends GraphGenerator {
@@ -37,7 +38,7 @@ private[generator] object SimpleRandomGraph extends GraphGenerator {
   // Пока нигде не используется
   private[generator] def takeNRandomVSPs(vsps: Seq[VSP], n: Int): Seq[VSP] = {
 
-    @scala.annotation.tailrec
+    @tailrec
     def go(vsps: Seq[VSP], vspsTaken: Seq[VSP], nLeft: Int): Seq[VSP] = {
       if (nLeft == 0) vspsTaken
       else {
@@ -53,6 +54,7 @@ private[generator] object SimpleRandomGraph extends GraphGenerator {
     generateUntilConnected(size, genUnsafeGraph, 10)
   }
 
+  @tailrec
   private[generator] def generateUntilConnected(size: Int, graphGen: Int => constrained.Graph[BankBuilding, WUnDiEdge], maxRetries: Int): constrained.Graph[BankBuilding, WUnDiEdge] ={
     /* Перегенерировать граф, пока он не будет цельным */
     val graph = graphGen(size)
@@ -68,7 +70,6 @@ private[generator] object SimpleRandomGraph extends GraphGenerator {
     }
 
   }
-
 
   private def genUnsafeGraph(size: Int): constrained.Graph[BankBuilding, WUnDiEdge] = {
 

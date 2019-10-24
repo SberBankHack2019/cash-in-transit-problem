@@ -2,8 +2,8 @@ package com.sberhack.fun.graph.generator
 
 import com.sberhack.fun.graph.vertex.{BankBuilding, Vault, createVSP}
 import scalax.collection.Graph
-import scalax.collection.edge.WUnDiEdge
 import scalax.collection.edge.Implicits._
+import scalax.collection.edge.WUnDiEdge
 
 private[generator] object SimpleLinkedGraph extends GraphGenerator{
   override def genGraph(size: Int): Graph[BankBuilding, WUnDiEdge] = {

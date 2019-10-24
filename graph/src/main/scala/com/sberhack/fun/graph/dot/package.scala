@@ -6,10 +6,10 @@ import com.sberhack.fun.graph.configuration.config
 import com.sberhack.fun.graph.vertex.BankBuilding
 import scalax.collection.Graph
 import scalax.collection.edge.WUnDiEdge
+import scalax.collection.io.dot._
 import scalax.collection.io.dot.implicits._
-import scalax.collection.io.dot.{DotAttr, DotAttrStmt, DotEdgeStmt, DotGraph, DotRootGraph, Elem, implicits, _}
 
-import scala.sys.process._
+import scala.sys.process.Process
 
 package object dot {
 
@@ -70,10 +70,10 @@ package object dot {
   private[graph] def createPngFromDotFile(fileName: String,
                                           shFileName: String,
                                           shFileArgs: List[String]): Unit = {
-    val dotFileName = s"$fileName.dot"
+    val dotFullFileName = s"$fileName.dot"
     val dotFilePath = "graph/src/main/generated/dot"
 
-    val pngFileName = s"$fileName.png"
+    val pngFullFileName = s"$fileName.png"
     val pngFilePath = "graph/src/main/generated/png"
     val dotFilePathF = new File(pngFilePath)
 
@@ -85,6 +85,9 @@ package object dot {
     }
 
     prettyEcho("***Creating .PNG image from .DOT file***")
+    echo(s"Full .DOT file PathName: $dotFilePath/$dotFullFileName")
+    echo(s"Full .PNG file PathName: $pngFilePath/$pngFullFileName")
+    exec(s"$shFilePath/$shFullFileName", shFileArgs)
     echo(s"Full .DOT file PathName: $dotFilePath/$dotFileName")
     echo(s"Full .PNG file PathName: $pngFilePath/$pngFileName")
     exec(s"$shFilePath/$shFullFileName", shFileArgs)

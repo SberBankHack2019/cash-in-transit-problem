@@ -1,8 +1,8 @@
 package com.sberhack.fun.graph
 
-import com.sberhack.fun.graph.vertex.BankBuilding
-import com.sberhack.fun.graph.utils.{rnd, roundDouble}
 import com.sberhack.fun.graph.configuration.config
+import com.sberhack.fun.graph.utils.{rnd, roundDouble}
+import com.sberhack.fun.graph.vertex.BankBuilding
 import scalax.collection.Graph
 import scalax.collection.edge.WUnDiEdge
 
