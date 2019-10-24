@@ -9,7 +9,7 @@ import scalax.collection.edge.WUnDiEdge
 import scalax.collection.io.dot._
 import scalax.collection.io.dot.implicits._
 
-import scala.sys.process.Process
+import scala.sys.process._
 
 package object dot {
 
@@ -88,9 +88,7 @@ package object dot {
     echo(s"Full .DOT file PathName: $dotFilePath/$dotFullFileName")
     echo(s"Full .PNG file PathName: $pngFilePath/$pngFullFileName")
     exec(s"$shFilePath/$shFullFileName", shFileArgs)
-    echo(s"Full .DOT file PathName: $dotFilePath/$dotFileName")
-    echo(s"Full .PNG file PathName: $pngFilePath/$pngFileName")
-    exec(s"$shFilePath/$shFullFileName", shFileArgs)
+
   }
 
 }
