@@ -17,7 +17,7 @@ package object dot {
 
   private val nodeShapeDotConf = DotAttrStmt(Elem.node, List(DotAttr("shape",  config.dot.nodeShape)))
 
-  implicit private[graph] class GraphToDot(graph: Graph[BankNode, WUnDiEdge]) {
+  implicit private[fun] class GraphToDot(graph: Graph[BankNode, WUnDiEdge]) {
 
     private val dotRoot = DotRootGraph(directed = false,
       id = Some(graphName),
