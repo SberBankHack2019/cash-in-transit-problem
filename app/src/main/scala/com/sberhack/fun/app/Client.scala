@@ -38,6 +38,17 @@ class Client(val serverUri: String) extends WebSocketClient(new URI(serverUri)) 
 
             case Left(_) =>
           }
+
+          json.as[VaultPoint] match {
+            case Right(vaultPoint) =>
+              logger.info("Start VaultPoint logic!")
+
+              // todo VaultPoint LOGIC
+
+              return // DO NOT DELETE
+
+            case Left(_) =>
+          }
         }
 
         if (!isMessageFound) {

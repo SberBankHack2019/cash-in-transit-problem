@@ -8,19 +8,17 @@ package object responses extends AutoDerivation {
                         cars: List[String],
                         level: Int)
 
-  case class Route(a: Int,
-                   b: Int,
-                   time: Int)
+  case class EdgeRoute(a: Int,
+                       b: Int,
+                       time: Int)
 
-  case class Routes(routes: List[Route])
+  case class Routes(routes: List[EdgeRoute])
 
   case class EdgeTraffic(a: Int,
                          b: Int,
-                         time: Int)
+                         jam: String)
 
   case class Traffic(traffic: List[EdgeTraffic])
-
-  case class TrafficJam(trafficjam: List[EdgeTraffic])
 
   case class VertexPoint(p: Int,
                          money: Int)
@@ -28,5 +26,8 @@ package object responses extends AutoDerivation {
   case class Points(points: List[VertexPoint])
 
   case class DestinationPoint(point: Int,
-                              car: String)
+                              car: String,
+                              carsum: Long)
+
+  case class VaultPoint(teamsum: Long)
 }
