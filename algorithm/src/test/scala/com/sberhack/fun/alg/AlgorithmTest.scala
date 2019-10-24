@@ -12,11 +12,12 @@ class AlgorithmTest extends AnyFreeSpec with Matchers {
  "Algorithm" - {
 
    val car1 = Car("car1", 10, 10, 10, None)
-   val car2 = Car("car1", 10, 10, 10, None)
-   val car3 = Car("car1", 10, 10, 10, None)
+   val car2 = Car("car2", 10, 10, 10, None)
+   val car3 = Car("car3", 10, 10, 10, None)
 
    val noNextActionsWorld = World(
      "Every car busy world",
+     "TOKEN",
      1,
      Graph.empty,
      Seq(car1, car2, car3)
