@@ -9,6 +9,8 @@ lazy val scalaGraphVersion = "1.13.0"
 lazy val scalaGraphDotVersion = "1.12.1"
 lazy val pureConfigVersion = "0.11.1"
 
+val circeVersion = "0.11.1"
+
 lazy val all = project
   .in(file("."))
   .settings(
@@ -18,7 +20,7 @@ lazy val all = project
       homepage := Some(url("https://github.com/SberBankHack2019/cash-in-transit-problem")),
       version := "1.0.0",
       libraryDependencies ++= Seq(
-        
+
       )
     )
   ).aggregate(app, graph, visualisation, algorithm, world)
@@ -28,7 +30,7 @@ lazy val app = project
   .settings(
     defaultSettings ++ Seq(
       libraryDependencies ++= Seq(
-        
+
       )
     )
   ).dependsOn(world)
@@ -51,7 +53,7 @@ lazy val visualisation = project
   .settings(
     defaultSettings ++ Seq(
       libraryDependencies ++= Seq(
-        
+
       )
     )
   ).dependsOn(graph)
@@ -61,7 +63,7 @@ lazy val algorithm = project
   .settings(
     defaultSettings ++ Seq(
       libraryDependencies ++= Seq(
-        
+
       )
     )
   ).dependsOn(graph, visualisation)
@@ -71,10 +73,22 @@ lazy val world = project
   .settings(
     defaultSettings ++ Seq(
       libraryDependencies ++= Seq(
-        
+
       )
     )
   ).dependsOn(graph, visualisation, algorithm)
+
+lazy val struct = project
+    .in(file("struct"))
+    .settings(
+      defaultSettings ++ Seq(
+        libraryDependencies ++= Seq(
+          "io.circe" %% "circe-core" % circeVersion,
+          "io.circe" %% "circe-generic" % circeVersion,
+          "io.circe" %% "circe-parser" % circeVersion
+        )
+      )
+    )
 
 resolvers ++= Seq(
   Resolver.sbtPluginRepo("releases"),
@@ -100,7 +114,7 @@ lazy val defaultSettings = Seq(
 
   libraryDependencies ++= Seq(
     "dev.zio" %% "zio" % "1.0.0-RC11-1",
-    "org.scalatest" %% "scalatest" % "3.0.8" % "test"    
+    "org.scalatest" %% "scalatest" % "3.0.8" % "test"
   )
 
 )
