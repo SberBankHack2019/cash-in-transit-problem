@@ -1,8 +1,9 @@
 package com.sberhack.fun.alg
 
-import com.sberhack.fun.car.Car
+import com.sberhack.fun.car.{Car, CarNextMove}
 import com.sberhack.fun.graph.node.BankNode
 import com.sberhack.fun.world.structure.World
+import com.sberhack.fun.alg.functions._
 import scalax.collection.Graph
 import scalax.collection.edge.WUnDiEdge
 
@@ -22,10 +23,17 @@ object Algorithm  {
     }.toSeq
   }
 
-  def findBestPath(paths: Seq[Path], function: Path => Double) = {
+  def findBestPath(paths: Seq[Path], function: Path => Double): BankNode = {
     paths.map(q => (q.head, function(q))).minBy { case (firstNodeInPath, pathValue) =>
       (pathValue, firstNodeInPath.toString)
     }._1
+  }
+
+  def getNodeById(world: World, nodeId: Int): BankNode = {
+    world.world.nodes.map(_.toOuter).find(_.id == nodeId) match {
+      case Some(value) =>  value
+      case None => throw new Exception(s"Node with id $nodeId not found in graph")
+    }
   }
 
   def calculateNextActions(world: World): Seq[Car] = {
@@ -33,10 +41,10 @@ object Algorithm  {
     world.carsWithoutTask match {
       case Seq() => Seq() // Нет машин которым нечего делать
       case cars => cars.map{ car =>
-       // world.world.nodes.map(_.toOuter).filter(s => )
-         //genPossibleRoutes(world.world, car.currentNodeId)
-        ???
+       val goTo =  findBestPath(genPossibleRoutes(world.world, getNodeById(world, car.currentNodeId)).map(_._2), SergeyFunction)
+        car.copy(nextMove = Some(CarNextMove(goTo.id, cashIn = true)))
       }
+
     }
 
   }
