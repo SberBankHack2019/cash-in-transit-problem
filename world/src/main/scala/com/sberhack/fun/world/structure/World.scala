@@ -7,6 +7,7 @@ import scalax.collection.edge.WUnDiEdge
 
 case class World (
                    name: String,
+                   token: String,
                    level: Long,
                    world: Graph[BankNode, WUnDiEdge],
                    cars: Seq[Car]

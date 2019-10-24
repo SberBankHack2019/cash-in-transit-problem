@@ -53,7 +53,7 @@ lazy val graph = project
         "com.github.pureconfig" %% "pureconfig" % pureConfigVersion
       )
     )
-  ).dependsOn(car)
+  ).dependsOn(car, struct)
 
 lazy val visualisation = project
   .in(file("visualisation"))
