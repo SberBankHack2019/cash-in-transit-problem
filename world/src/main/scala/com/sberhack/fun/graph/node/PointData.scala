@@ -12,4 +12,7 @@ case class PointData (
                        carCashIn: Option[Car],
                        cars: Seq[Car],
                        timeRemain: Double
-                     )
+                     ) {
+  override def toString: String =
+    s"id=$id, money=$money, carCashIn=$carCashIn, cars=${cars.mkString(", ")}, timeRemain=$timeRemain"
+}

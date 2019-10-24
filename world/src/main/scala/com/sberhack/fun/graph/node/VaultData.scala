@@ -6,4 +6,7 @@ case class VaultData (
                        id: Int,
                        money: Double, // Количество денег которые уже отвезены в хранилище
                        cars: Seq[Car]
-                     )
+                     ) {
+  override def toString: String =
+    s"id=$id, money=$money, cars=${cars.mkString(", ")}"
+}

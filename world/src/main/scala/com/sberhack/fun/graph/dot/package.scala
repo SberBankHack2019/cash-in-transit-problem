@@ -37,7 +37,7 @@ package object dot {
 
   private[graph] def saveDotFile(fileName: String, dot: String): Unit = {
     val dotFileName = s"$fileName.dot"
-    val dotFilePath = "graph/src/main/generated/dot"
+    val dotFilePath = "world/src/main/generated/dot"
     val dotFilePathF = new File(dotFilePath)
 
     if(!dotFilePathF.exists()){

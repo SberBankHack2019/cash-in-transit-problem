@@ -5,11 +5,11 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 import com.sberhack.fun.struct.requests._
 import com.sberhack.fun.struct.responses._
+import com.sberhack.fun.world.World
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.Encoder
 import org.java_websocket.client.WebSocketClient
 import org.java_websocket.handshake.ServerHandshake
-import com.sberhack.fun.world.World
 
 class Client(val serverUri: String) extends WebSocketClient(new URI(serverUri)) with LazyLogging {
 
@@ -75,7 +75,7 @@ class Client(val serverUri: String) extends WebSocketClient(new URI(serverUri)) 
               } else {
                 logger.info("Start Traffic logic!")
 
-                World.updateTraffic(traffic: Traffic)
+                World.update(traffic: Traffic)
 
                 return // DO NOT DELETE
               }

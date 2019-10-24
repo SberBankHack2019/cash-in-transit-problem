@@ -17,7 +17,7 @@ package object generator {
     //create Start
     val startNode: BankNode = Start(StartData(0, cars))
     //create Vault
-    val vaultNode: BankNode = Vault(VaultData(0, 0, cars))
+    val vaultNode: BankNode = Vault(VaultData(1, 0, cars))
     //create PointConfig
     val pointConfig = PointConfig()
 
@@ -35,20 +35,28 @@ package object generator {
       .map{ route: EdgeRoute => (route.a, route.b) match {
           case (0, 0) => (startNode ~% startNode) (route.time * getJam(route, traffic))
           case (0, 1) => (startNode ~% vaultNode) (route.time * getJam(route, traffic))
+          case (0, _) => (startNode ~% getNodes(route, pointNodes)._2) (route.time * getJam(route, traffic))
+          case (_, 0) => (getNodes(route, pointNodes)._1 ~% startNode) (route.time * getJam(route, traffic))
           case (1, 0) => (vaultNode ~% startNode) (route.time * getJam(route, traffic))
           case (1, 1) => (vaultNode ~% vaultNode) (route.time * getJam(route, traffic))
-          case (_, _) => (getPoints(route, points)._1 ~% getPoints(route, points)._2) (route.time * getJam(route, traffic))
+          case (1, _) => (vaultNode ~% getNodes(route, pointNodes)._2) (route.time * getJam(route, traffic))
+          case (_, 1) => (getNodes(route, pointNodes)._1 ~% vaultNode) (route.time * getJam(route, traffic))
+          case (_, _) => (getNodes(route, pointNodes)._1 ~% getNodes(route, pointNodes)._2) (route.time * getJam(route, traffic))
         }
       }
 
     Graph.from(pointNodes, nodeEdges)
   }
 
+  def nodeEdges(routes: Routes): Seq[WUnDiEdge[BankNode]] = {
+    ???
+  }
+
   def updateGraph(graph: Graph[BankNode, WUnDiEdge], traffic: Traffic): Graph[BankNode, WUnDiEdge] = {
     ???
   }
 
-  def updateGraph(graph: Graph[BankNode, WUnDiEdge], cars: Seq[Car]): Graph[BankNode, WUnDiEdge] = {
+  def updateGraph(graph: Graph[BankNode, WUnDiEdge], car: Car): Graph[BankNode, WUnDiEdge] = {
     ???
   }
 
@@ -60,23 +68,34 @@ package object generator {
     getMaybeJam(route, traffic).getOrElse(1.0)
   }
 
-  def getMaybePoints(route: EdgeRoute, points: Points): (Option[Point], Option[Point]) = {
-    val pointA: Option[Point] = points.points.find(point => point.p == route.a).map{ point =>
-      val pointConfig = PointConfig()
-      Point(PointData(point.p, point.money, None, Seq.empty[Car], pointConfig.timeRemainDefault))
-    }
-    val pointB: Option[Point] = points.points.find(point => point.p == route.b).map{ point =>
-      val pointConfig = PointConfig()
-      Point(PointData(point.p, point.money, None, Seq.empty[Car], pointConfig.timeRemainDefault))
-    }
+  def getMaybeNodeById(id: Int, nodes: Seq[BankNode]): Option[BankNode] = {
+    id match {
+      case 0 => nodes.find {
+        case _: Start => true
+        case _ => false
+      }.map(_.asInstanceOf[Start])
 
-    (pointA, pointB)
+      case 1 => nodes.find {
+        case _: Vault => true
+        case _ => false
+      }.map(_.asInstanceOf[Vault])
+
+      case a => nodes.find {
+        case node: Point => node.getData.id == a
+        case _ => false
+      }.map(_.asInstanceOf[Point])
+    }
   }
 
-  def getPoints(route: EdgeRoute, points: Points): (Point, Point) = {
-    getMaybePoints(route, points) match {
-      case (Some(p1), Some(p2)) => (p1, p2)
-      case (_, _) => throw new Exception(s"Not Found in Points (a, b) from EdgeRoute: (${route.a}, ${route.b})")
+  def getMaybeNodes(route: EdgeRoute, nodes: Seq[BankNode]): (Option[BankNode], Option[BankNode]) = {
+    (getMaybeNodeById(route.a, nodes), getMaybeNodeById(route.b, nodes))
+  }
+
+  def getNodes(route: EdgeRoute, nodes: Seq[BankNode]): (BankNode, BankNode) = {
+    getMaybeNodes(route, nodes) match {
+      case (Some(n1), Some(n2)) => (n1, n2)
+      case (_, _) =>
+        throw new Exception(s"Points from EdgeRoute: (${route.a}, ${route.b}) Not Found in Nodes ${nodes.mkString(", ")}")
     }
   }
 

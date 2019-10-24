@@ -11,15 +11,6 @@ case class Car(
                 currentNodeId: Int,
                 nextMove: Option[CarNextMove]
               ) {
-
   override def toString: String =
-    s"""(Car \"$name\"
-       | cash: $cash
-       | limit: $cashLimit
-       | current Node: $currentNodeId
-       | next Move: ${nextMove.getOrElse("None")}
-       )""".stripMargin
-
-
-
+    s"Car $name cash=$cash, limit=$cashLimit, current Node=$currentNodeId, next Move=${nextMove}"
 }
