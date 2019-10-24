@@ -29,7 +29,7 @@ object World {
   }
 
   def update(dp: DestinationPoint) = {
-    val updatedCar = Car(dp.car, dp.carsum, CarConfig().cashLimitDefault, dp.point, None)
+    val updatedCar = Car(dp.car, if (dp.point == 1) 0 else dp.carsum, CarConfig().cashLimitDefault, dp.point, None)
     val cars = worldStructure.cars.filter(_.name != dp.car) :+ updatedCar
 
     nextActions = calculateNextActions(worldStructure)
