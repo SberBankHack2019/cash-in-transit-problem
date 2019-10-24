@@ -83,7 +83,7 @@ lazy val world = project
 
       )
     )
-  ).dependsOn(graph, visualisation)
+  ).dependsOn(graph, visualisation, car, struct, algorithm)
 
 lazy val car = project
   .in(file("car"))
