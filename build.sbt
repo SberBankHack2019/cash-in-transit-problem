@@ -1,7 +1,7 @@
 import sbt.Keys._
 import sbt._
 
-lazy val scalaVersion_2_13 = "2.13.0-RC3"
+lazy val scalaVersion_2_13 = "2.13.1"
 lazy val scalaVersion_2_12 = "2.12.8"
 lazy val scalaVersion_2_11 = "2.11.12"
 
@@ -14,6 +14,8 @@ lazy val log4jVersion = "2.12.1"
 lazy val slf4jVersion = "1.7.5"
 
 val circeVersion = "0.11.1"
+
+
 
 lazy val all = project
   .in(file("."))
@@ -144,7 +146,7 @@ lazy val defaultSettings = Seq(
 
   libraryDependencies ++= Seq(
     "dev.zio" %% "zio" % "1.0.0-RC11-1",
-    "org.scalatest" %% "scalatest" % "3.0.8" % "test"
+    "org.scalatest" %% "scalatest" % "3.2.0-M1" % "test"
   )
 
 )

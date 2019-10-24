@@ -1,7 +1,8 @@
 package com.sberhack.fun.graph.generator
 
 //import com.sberhack.fun.graph.node.{BankNode, Point, createVSP}
-import org.scalatest.{FreeSpec, Matchers}
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.should.Matchers
 //import scalax.collection.constrained
 //import scalax.collection.constrained.Config
 //import scalax.collection.constrained.constraints.Connected
@@ -10,7 +11,7 @@ import org.scalatest.{FreeSpec, Matchers}
 //
 //import scala.collection.immutable
 
-class RandomGeneratorTest extends FreeSpec with Matchers {
+class RandomGeneratorTest extends AnyFreeSpec with Matchers {
 
   private val generator = SimpleRandomGraph
 //
