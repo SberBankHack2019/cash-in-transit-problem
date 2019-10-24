@@ -1,5 +1,9 @@
 package com.sberhack.fun.car
 
+case class CarConfig() {
+  val cashLimitDefault: Double = 1000000.0
+}
+
 case class Car(
                 name: String,
                 cash: Double,
@@ -15,5 +19,7 @@ case class Car(
        | current Node: $currentNodeId
        | next Move: ${nextMove.getOrElse("None")}
        )""".stripMargin
+
+
 
 }
