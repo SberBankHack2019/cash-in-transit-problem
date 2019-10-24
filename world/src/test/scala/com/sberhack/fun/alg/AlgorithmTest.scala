@@ -43,7 +43,10 @@ class AlgorithmTest extends AnyFreeSpec with Matchers {
     }
   }
 
-  /*  val visitedNodes = scala.collection.mutable.HashMap[BankNode, Boolean]()
+  /*
+        def genPossibleRoutes(graph: Graph[BankNode, WUnDiEdge], currentNode: BankNode, depth: Int): Unit/*: Seq[(BankNode, (Seq[BankNode], Double))]*/ = {
+
+  val visitedNodes = scala.collection.mutable.HashMap[BankNode, Boolean]()
 
         val graphNodes = graph.nodes.map(_.toOuter)
 

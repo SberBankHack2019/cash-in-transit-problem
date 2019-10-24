@@ -3,6 +3,8 @@ package com.sberhack.fun.graph.node
 class Point(data: PointData) extends BankNode {
   override def vertexText: String = s"Point data: $data"
   def getData = data
+
+  override val id: Int = data.id
 }
 
 object Point {

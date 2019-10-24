@@ -8,7 +8,7 @@ case class Car(
                 name: String,
                 cash: Double,
                 cashLimit: Double,
-                currentNodeId: Long,
+                currentNodeId: Int,
                 nextMove: Option[CarNextMove]
               ) {
 
