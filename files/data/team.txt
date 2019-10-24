@@ -1,5 +1,5 @@
 < { "team": "SamurAI"}
-> { "token" : "12321", "cars:": ["sb1", "sb2", "sb3", "sb4"], "level": 1 }
+> { "token" : "12321", "cars": ["sb1", "sb2", "sb3", "sb4"], "level": 1 }
 
 > { "routes": [
 {a:1 , b:7 , time: 31 },

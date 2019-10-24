@@ -1,3 +1,5 @@
 .idea/
 target/
 graph/src/main/generated/dot/
+*.yml
+*.log

@@ -8,6 +8,10 @@ lazy val scalaVersion_2_11 = "2.11.12"
 lazy val scalaGraphVersion = "1.13.0"
 lazy val scalaGraphDotVersion = "1.12.1"
 lazy val pureConfigVersion = "0.11.1"
+lazy val javaWebsocketVersion = "1.4.0"
+lazy val scalaLoggingVersion = "3.9.2"
+lazy val log4jVersion = "2.12.1"
+lazy val slf4jVersion = "1.7.5"
 
 val circeVersion = "0.11.1"
 
@@ -30,10 +34,13 @@ lazy val app = project
   .settings(
     defaultSettings ++ Seq(
       libraryDependencies ++= Seq(
-
+        "org.java-websocket" % "Java-WebSocket" % javaWebsocketVersion,
+        "org.apache.logging.log4j" % "log4j-core" % log4jVersion,
+        "org.slf4j" % "slf4j-log4j12" % slf4jVersion,
+        "com.typesafe.scala-logging" %% "scala-logging" % scalaLoggingVersion
       )
     )
-  ).dependsOn(world)
+  ).dependsOn(graph, struct)
 
 lazy val graph = project
   .in(file("graph"))
@@ -79,16 +86,29 @@ lazy val world = project
   ).dependsOn(graph, visualisation, algorithm)
 
 lazy val struct = project
-    .in(file("struct"))
-    .settings(
-      defaultSettings ++ Seq(
-        libraryDependencies ++= Seq(
-          "io.circe" %% "circe-core" % circeVersion,
-          "io.circe" %% "circe-generic" % circeVersion,
-          "io.circe" %% "circe-parser" % circeVersion
-        )
+  .in(file("struct"))
+  .settings(
+    defaultSettings ++ Seq(
+      libraryDependencies ++= Seq(
+        "io.circe" %% "circe-core" % circeVersion,
+        "io.circe" %% "circe-generic" % circeVersion,
+        "io.circe" %% "circe-parser" % circeVersion
       )
     )
+  )
+
+lazy val server = project
+  .in(file("server"))
+  .settings(
+    defaultSettings ++ Seq(
+      libraryDependencies ++= Seq(
+        "org.java-websocket" % "Java-WebSocket" % javaWebsocketVersion,
+        "org.apache.logging.log4j" % "log4j-core" % log4jVersion,
+        "org.slf4j" % "slf4j-log4j12" % slf4jVersion,
+        "com.typesafe.scala-logging" %% "scala-logging" % scalaLoggingVersion
+      )
+    )
+  ).dependsOn(struct)
 
 resolvers ++= Seq(
   Resolver.sbtPluginRepo("releases"),
