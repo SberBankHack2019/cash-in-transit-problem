@@ -1,14 +1,15 @@
 package com.sberhack.fun.graph
 
 import java.io.{File, PrintWriter}
-import scala.sys.process.Process
+
 import com.sberhack.fun.graph.configuration.config
 import com.sberhack.fun.graph.vertex.BankBuilding
 import scalax.collection.Graph
 import scalax.collection.edge.WUnDiEdge
-import scalax.collection.io.dot.{DotAttr, DotAttrStmt, DotEdgeStmt, DotGraph, DotRootGraph, Elem, implicits}
-import scalax.collection.io.dot._
-import implicits._
+import scalax.collection.io.dot.implicits._
+import scalax.collection.io.dot.{DotAttr, DotAttrStmt, DotEdgeStmt, DotGraph, DotRootGraph, Elem, implicits, _}
+
+import scala.sys.process._
 
 package object dot {
 
@@ -52,7 +53,7 @@ package object dot {
   private[graph] def echo(message: String): Unit = {
     val currentTime: String = "date \"+%Y-%m-%d %H:%M:%S.%N\""
 
-    Process(s"echo [TIME] $$( $currentTime ) [INFO] $message").run()
+    s"echo [TIME] $$( $currentTime ) [INFO] $message".!
   }
 
   private[graph] def prettyEcho(message: String): Unit = {
@@ -76,7 +77,7 @@ package object dot {
     val pngFilePath = "graph/src/main/generated/png"
     val dotFilePathF = new File(pngFilePath)
 
-    val shFileName = s"$shFileName.sh"
+    val shFullFileName = s"$shFileName.sh"
     val shFilePath = "graph/src/main/generated"
 
     if(!dotFilePathF.exists()){
@@ -86,7 +87,7 @@ package object dot {
     prettyEcho("***Creating .PNG image from .DOT file***")
     echo(s"Full .DOT file PathName: $dotFilePath/$dotFileName")
     echo(s"Full .PNG file PathName: $pngFilePath/$pngFileName")
-    exec(s"$shFilePath/shFileName", shFileArgs)
+    exec(s"$shFilePath/$shFullFileName", shFileArgs)
   }
 
 }

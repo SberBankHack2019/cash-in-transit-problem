@@ -16,5 +16,3 @@ object Main extends App{
   createPngFromDotFile(graphFileName, "dotToFile", List(graphFileName, "png"))
 
 }
-
-
