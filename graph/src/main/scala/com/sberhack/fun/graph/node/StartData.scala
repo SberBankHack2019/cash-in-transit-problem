@@ -1,3 +1,8 @@
 package com.sberhack.fun.graph.node
 
-case class StartData()
+import com.sberhack.fun.car.Car
+
+case class StartData(
+                      id: Long,
+                      cars: Seq[Car]
+                    )

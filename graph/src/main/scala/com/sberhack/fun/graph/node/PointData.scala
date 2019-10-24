@@ -1,3 +1,11 @@
 package com.sberhack.fun.graph.node
 
-case class PointData ()
+import com.sberhack.fun.car.Car
+
+case class PointData (
+                       id: Long,
+                       money: Double,
+                       carCashIn: Option[Car],
+                       cars: Seq[Car],
+                       timeRemain: Double
+                     )
