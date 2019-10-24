@@ -1,6 +1,6 @@
-package com.sberhack.fun.graph.vertex
+package com.sberhack.fun.graph.node
 
-trait BankBuilding{
+trait BankNode{
 
   /* Текст в вершинах графа
    * Надо использовать метод toString потому что любой другой будет стерт в edgeTransformer
