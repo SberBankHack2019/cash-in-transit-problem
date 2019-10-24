@@ -13,6 +13,6 @@ case class World (
                    cars: Seq[Car]
                  ){
 
-  def carsWithoutTask: Seq[Car] = cars.filter(_.nextMove.isDefined)
+  def carsWithoutTask: Seq[Car] = cars.filterNot(_.nextMove.isDefined)
 
 }
