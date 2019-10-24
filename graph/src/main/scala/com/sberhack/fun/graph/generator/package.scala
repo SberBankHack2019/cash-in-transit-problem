@@ -3,11 +3,21 @@ package com.sberhack.fun.graph
 import com.sberhack.fun.graph.configuration.config
 import com.sberhack.fun.graph.node.BankNode
 import com.sberhack.fun.graph.utils.{rnd, roundDouble}
+import com.sberhack.fun.struct.responses.{Points, Routes, Traffic}
 import scalax.collection.Graph
 import scalax.collection.edge.WUnDiEdge
 
 
 package object generator {
+
+
+  def createWorldGraph(points: Points, routes: Routes, traffic: Traffic): Graph[BankNode, WUnDiEdge] = {
+    ???
+  }
+
+  def updateWorldGraph(points: Points, traffic: Traffic): Graph[BankNode, WUnDiEdge] = {
+    ???
+  }
 
   private[generator] def distance = roundDouble(
     rnd.nextDouble(config.vertex.vsp.distance.minDistance, config.vertex.vsp.distance.maxDistance),
