@@ -17,7 +17,7 @@ abstract class World {
              traffic: Traffic
              ): Unit = {
     val cars: Seq[Car] = config.cars.map(Car(_, 0, defaultCapacity, 0, None))
-    val worldGraph = createWorldGraph(points, routes, traffic)
+    val worldGraph = createGraph(points, routes, traffic)
     worldStructure = World(worldName, config.token, config.level, worldGraph, cars)
   }
 
@@ -28,7 +28,7 @@ abstract class World {
              traffic: Traffic
             ): Unit = {
     val cars: Seq[Car] = config.cars.map(Car(_, 0, defaultCapacity, 0, None))
-    val worldGraph = updateWorldGraph(points, traffic)
+    val worldGraph = updateGraph(points, traffic)
     worldStructure = World(worldName, config.token, config.level, worldGraph, cars)
   }
 
