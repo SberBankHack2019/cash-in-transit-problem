@@ -9,7 +9,6 @@ import com.typesafe.scalalogging.LazyLogging
 import io.circe.Encoder
 import org.java_websocket.client.WebSocketClient
 import org.java_websocket.handshake.ServerHandshake
-import com.sberhack.fun.struct.json._
 import com.sberhack.fun.world.World
 
 class Client(val serverUri: String) extends WebSocketClient(new URI(serverUri)) with LazyLogging {
@@ -21,6 +20,7 @@ class Client(val serverUri: String) extends WebSocketClient(new URI(serverUri)) 
   var trafficInit: Traffic = _
 
   override def onMessage(message: String): Unit = {
+    import com.sberhack.fun.struct.json._
     var isMessageFound: Boolean = false
     logger.debug(s"Got message: $message")
 
@@ -33,8 +33,15 @@ class Client(val serverUri: String) extends WebSocketClient(new URI(serverUri)) 
             case Right(destinationPoint) =>
               logger.info("Start DestinationPoint logic!")
 
-              World.nextActions.foreach(car =>  {
-                ???
+              World.update(destinationPoint)
+
+              World.nextActions.foreach(car => {
+                car.nextMove match {
+                  case Some(move) =>
+                    val goToMessage = GoTo(move.nodeId, car.name, !move.cashIn)
+                    sendMessage(goToMessage)
+                  case None =>
+                }
               })
 
               return // DO NOT DELETE
@@ -147,11 +154,11 @@ class Client(val serverUri: String) extends WebSocketClient(new URI(serverUri)) 
   }
 
   override def onError(ex: Exception): Unit = {
+    import com.sberhack.fun.struct.json._
     logger.error(ex.getMessage, ex)
 
     if (gameConfigInit != null) {
       logger.info("Trying to reconnect...")
-      import com.sberhack.fun.struct.json._ // ваще хз почему не пашет без этого
       sendMessage(Reconnect(gameConfigInit.token))
     } else {
       logger.error("#########################################")
@@ -169,8 +176,9 @@ class Client(val serverUri: String) extends WebSocketClient(new URI(serverUri)) 
   }
 
   def sendMessage[T](message: T)(implicit encoder: Encoder[T]): Unit = {
+    import com.sberhack.fun.struct.json._
     send(message.asJson.noSpaces)
-    logger.debug(s"Message $message sent to server!")
+    logger.info(s"Message $message sent to server!")
   }
 }
 

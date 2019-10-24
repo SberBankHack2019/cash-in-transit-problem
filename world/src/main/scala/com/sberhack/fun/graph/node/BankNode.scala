@@ -10,4 +10,6 @@ trait BankNode{
 
   protected def vertexText: String
 
+  val id: Int
+
 }
