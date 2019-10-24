@@ -100,29 +100,30 @@ class Client(val serverUri: String) extends WebSocketClient(new URI(serverUri)) 
               case Left(_) =>
             }
           }
-        }
 
-        if (!isMessageFound) {
-          json.as[GameConfig] match {
-            case Right(gameConfig) =>
-              if (gameConfigInit == null) {
-                logger.info("Init GameConfig!")
-                gameConfigInit = gameConfig
-              } else {
-                logger.warn("Duplicate GameConfig before Init!!!")
-              }
-              isMessageFound = true
-            case Left(_) =>
+          if (!isMessageFound) {
+            json.as[GameConfig] match {
+              case Right(gameConfig) =>
+                if (gameConfigInit == null) {
+                  logger.info("Init GameConfig!")
+                  gameConfigInit = gameConfig
+                } else {
+                  logger.warn("Duplicate GameConfig before Init!!!")
+                }
+                isMessageFound = true
+              case Left(_) =>
+            }
           }
-        }
 
-        if (gameConfigInit != null && routesInit != null && pointsInit != null && trafficInit != null) {
-          logger.info("Creating world...")
+          if (gameConfigInit != null && routesInit != null && pointsInit != null && trafficInit != null) {
+            logger.info("Creating world...")
 
-          // todo CREATE WORLD
+            // todo CREATE WORLD
 
-          logger.info("World created!!!")
-          isInitialized.set(true)
+            logger.info("World created!!!")
+            isInitialized.set(true)
+          }
+
         }
 
         if (!isMessageFound) {
@@ -139,6 +140,7 @@ class Client(val serverUri: String) extends WebSocketClient(new URI(serverUri)) 
       import com.sberhack.fun.struct.json._ // ваще хз почему не пашет без этого
       sendMessage(Reconnect(gameConfigInit.token))
     } else {
+      logger.error("#########################################")
       logger.error("Cannot reconnect due to empty gameConfig!")
       System.exit(-1) // Хз че делать, когда мы еще не получили токен, но коннекшн отвалился
     }
