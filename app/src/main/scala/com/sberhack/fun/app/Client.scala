@@ -33,7 +33,7 @@ class Client(val serverUri: String) extends WebSocketClient(new URI(serverUri)) 
             case Right(destinationPoint) =>
               logger.info("Start DestinationPoint logic!")
 
-              // todo: обновить граф, с приехавшей машиной в DestinationPoint
+              World.update(destinationPoint)
 
               World.nextActions.foreach(car => {
                 car.nextMove match {
