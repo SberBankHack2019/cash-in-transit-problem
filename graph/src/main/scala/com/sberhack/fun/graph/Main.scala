@@ -13,6 +13,6 @@ object Main extends App{
 
   println(simpleGraph.toDotConfigured)
   saveDotFile(graphFileName, simpleGraph.toDotConfigured)
-  createPngFromDotFile(graphFileName, "dotToFile", List(graphFileName, "png"))
+//  createPngFromDotFile(graphFileName, "dotToFile", List(graphFileName, "png"))
 
 }
