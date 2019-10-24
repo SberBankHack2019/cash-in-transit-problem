@@ -1,8 +1,8 @@
 package com.sberhack.fun.graph.generator
 
 import com.sberhack.fun.graph.configuration.config
+import com.sberhack.fun.graph.node.{BankNode, Point, Vault, VaultData}
 import com.sberhack.fun.graph.utils.rnd
-import com.sberhack.fun.graph.vertex.{BankBuilding, VSP, Vault, createVSP}
 import scalax.collection.constrained
 import scalax.collection.constrained.constraints.Connected
 import scalax.collection.constrained.{Config, Graph}
@@ -25,21 +25,21 @@ private[generator] object SimpleRandomGraph extends GraphGenerator {
   // val чтобы у обоих игроков было одинаковое количество соединений с общим графом
   private val nBaseConnections = rnd.nextInt(minBaseConnections, maxBaseConnections + 1)
 
-  private def takeRandomVSP(vsp: VSP, vsps: Seq[VSP]) = {
+  private def takeRandomVSP(vsp: Point, vsps: Seq[Point]) = {
     val n = rnd.nextInt(0, vsps.size - 1)
     vsps.filterNot(_.equals(vsp))(n)
   }
 
-  private def takeRandomVSP(vsps: Seq[VSP]) = {
+  private def takeRandomVSP(vsps: Seq[Point]) = {
     val n = rnd.nextInt(0, vsps.size)
     vsps(n)
   }
 
   // Пока нигде не используется
-  private[generator] def takeNRandomVSPs(vsps: Seq[VSP], n: Int): Seq[VSP] = {
+  private[generator] def takeNRandomVSPs(vsps: Seq[Point], n: Int): Seq[Point] = {
 
     @tailrec
-    def go(vsps: Seq[VSP], vspsTaken: Seq[VSP], nLeft: Int): Seq[VSP] = {
+    def go(vsps: Seq[Point], vspsTaken: Seq[Point], nLeft: Int): Seq[Point] = {
       if (nLeft == 0) vspsTaken
       else {
         val newVspsTaken = vspsTaken :+ takeRandomVSP(vsps)
@@ -50,12 +50,12 @@ private[generator] object SimpleRandomGraph extends GraphGenerator {
     go(vsps, Seq(), n)
   }
 
-  override def genGraph(size: Int): Graph[BankBuilding, WUnDiEdge] = {
+  override def genGraph(size: Int): Graph[BankNode, WUnDiEdge] = {
     generateUntilConnected(size, genUnsafeGraph, 10)
   }
 
   @tailrec
-  private[generator] def generateUntilConnected(size: Int, graphGen: Int => constrained.Graph[BankBuilding, WUnDiEdge], maxRetries: Int): constrained.Graph[BankBuilding, WUnDiEdge] ={
+  private[generator] def generateUntilConnected(size: Int, graphGen: Int => constrained.Graph[BankNode, WUnDiEdge], maxRetries: Int): constrained.Graph[BankNode, WUnDiEdge] ={
     /* Перегенерировать граф, пока он не будет цельным */
     val graph = graphGen(size)
 
@@ -71,28 +71,31 @@ private[generator] object SimpleRandomGraph extends GraphGenerator {
 
   }
 
-  private def genUnsafeGraph(size: Int): constrained.Graph[BankBuilding, WUnDiEdge] = {
+  private def genUnsafeGraph(size: Int): constrained.Graph[BankNode, WUnDiEdge] = {
 
-    val player1Vault = Vault("Player1")
-    val player2Vault = Vault("Player2")
+    val kData = VaultData()
+    val lData = VaultData()
 
-    val vsps: Seq[VSP] = (0 to size).map(createVSP)
+    val player1Vault = Vault(kData)
+    val player2Vault = Vault(lData)
 
-    val vspConnections: Seq[WUnDiEdge[VSP]] = vsps.flatMap { vsp =>
+    val vsps: Seq[Point] = ??? //(0 to size).map(createVSP)
+
+    val vspConnections: Seq[WUnDiEdge[Point]] = vsps.flatMap { vsp =>
       (1 to nConnections).map(_ => (vsp ~% takeRandomVSP(vsp, vsps))(distance))
     }
 
-    val player1Connections: immutable.Seq[WUnDiEdge[BankBuilding]] = {
+    val player1Connections: immutable.Seq[WUnDiEdge[BankNode]] = {
       (1 to nBaseConnections).map(_ => (player1Vault ~% takeRandomVSP(vsps))(distance))
     }
 
-    val player2Connections: immutable.Seq[WUnDiEdge[BankBuilding]] = {
+    val player2Connections: immutable.Seq[WUnDiEdge[BankNode]] = {
       (1 to nBaseConnections).map(_ => (player2Vault ~% takeRandomVSP(vsps))(distance))
     }
 
-    val nodes: Seq[BankBuilding] = vsps :+ player1Vault :+ player2Vault
+    val nodes: Seq[BankNode] = vsps :+ player1Vault :+ player2Vault
 
-    val edges: Seq[WUnDiEdge[BankBuilding]] = vspConnections ++ player1Connections ++ player2Connections
+    val edges: Seq[WUnDiEdge[BankNode]] = vspConnections ++ player1Connections ++ player2Connections
 
     implicit val conf: Config = Connected
 

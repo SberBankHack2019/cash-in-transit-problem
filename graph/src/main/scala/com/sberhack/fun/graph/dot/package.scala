@@ -3,7 +3,7 @@ package com.sberhack.fun.graph
 import java.io.{File, PrintWriter}
 
 import com.sberhack.fun.graph.configuration.config
-import com.sberhack.fun.graph.vertex.BankBuilding
+import com.sberhack.fun.graph.node.BankNode
 import scalax.collection.Graph
 import scalax.collection.edge.WUnDiEdge
 import scalax.collection.io.dot._
@@ -17,14 +17,14 @@ package object dot {
 
   private val nodeShapeDotConf = DotAttrStmt(Elem.node, List(DotAttr("shape",  config.dot.nodeShape)))
 
-  implicit private[graph] class GraphToDot(graph: Graph[BankBuilding, WUnDiEdge]) {
+  implicit private[graph] class GraphToDot(graph: Graph[BankNode, WUnDiEdge]) {
 
     private val dotRoot = DotRootGraph(directed = false,
       id = Some(graphName),
       attrStmts = List(nodeShapeDotConf),
     )
 
-    private def edgeTransformer(innerEdge: Graph[BankBuilding, WUnDiEdge]#EdgeT):
+    private def edgeTransformer(innerEdge: Graph[BankNode, WUnDiEdge]#EdgeT):
       Option[(DotGraph, DotEdgeStmt)] = innerEdge.edge match {
         case WUnDiEdge(source, target, weight) => Some(
           (dotRoot, DotEdgeStmt(source.toString, target.toString, Seq(DotAttr("label", weight.toString))))

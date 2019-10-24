@@ -2,13 +2,13 @@ package com.sberhack.fun.graph
 
 import com.sberhack.fun.graph.dot._
 import com.sberhack.fun.graph.generator._
-import com.sberhack.fun.graph.vertex.BankBuilding
+import com.sberhack.fun.graph.node.BankNode
 import scalax.collection.Graph
 import scalax.collection.edge.WUnDiEdge
 
 object Main extends App{
 
-  val simpleGraph: Graph[BankBuilding, WUnDiEdge] = genSimpleRandomGraph(5)
+  val simpleGraph: Graph[BankNode, WUnDiEdge] = genSimpleRandomGraph(5)
   val graphFileName = "attempt1"
 
   println(simpleGraph.toDotConfigured)
