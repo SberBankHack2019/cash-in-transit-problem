@@ -11,6 +11,5 @@ object App {
     client.connect()
 
     // logic
-    client.sendMessage("Hi there")
   }
 }
