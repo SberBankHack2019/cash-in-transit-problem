@@ -44,6 +44,10 @@ package object generator {
     Graph.from(pointNodes, nodeEdges)
   }
 
+  def nodeEdges(routes: Routes): Seq[WUnDiEdge[BankNode]] = {
+    ???
+  }
+
   def updateGraph(graph: Graph[BankNode, WUnDiEdge], traffic: Traffic): Graph[BankNode, WUnDiEdge] = {
     ???
   }
