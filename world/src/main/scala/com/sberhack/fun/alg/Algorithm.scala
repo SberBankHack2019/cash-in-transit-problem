@@ -2,6 +2,7 @@ package com.sberhack.fun.alg
 
 import com.sberhack.fun.car.Car
 import com.sberhack.fun.world.structure.World
+import scalax.collection.Graph
 
 abstract class Algorithm {
 

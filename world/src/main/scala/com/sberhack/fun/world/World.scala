@@ -6,11 +6,12 @@ import com.sberhack.fun.world.structure.World
 import com.sberhack.fun.graph.generator._
 import com.sberhack.fun.alg.Algorithm._
 
-abstract class World {
+object World {
   val defaultCapacity = 50
   val worldName = "My Shiny World"
 
   var worldStructure: structure.World = _
+  var nextActions: Seq[Car] = _
 
   def create(config: GameConfig,
              points: Points,
@@ -19,18 +20,21 @@ abstract class World {
              ): Unit = {
     val cars: Seq[Car] = config.cars.map(Car(_, 0, defaultCapacity, 0, None))
     val worldGraph = createGraph(points, routes, traffic)
-    worldStructure = World(worldName, config.token, config.level, worldGraph, cars)
+    worldStructure = structure.World(worldName, config.token, config.level, worldGraph, cars)
   }
 
+  def updateTraffic(traffic: Traffic) = {
+    ???
+    //val worldGraph = updateGraph(traffic)
+    //worldStructure = worldStructure.copy(traffic=traffic)
+  }
 
-  def update(config: GameConfig,
-             points: Points,
-             routes: Routes,
-             traffic: Traffic
-            ): Unit = {
-    val cars: Seq[Car] = calculateNextActions(worldStructure)
-    val worldGraph = updateGraph(points, traffic)
-    worldStructure = World(worldName, config.token, config.level, worldGraph, cars)
+  def updatePoints(points: Points) = {
+    ???
+    /*val cars: Seq[Car] = calculateNextActions(worldStructure)
+    val worldGraph = updateGraph(points)
+    worldStructure = worldStructure.copy(world=worldGraph)*/
+
   }
 
 }

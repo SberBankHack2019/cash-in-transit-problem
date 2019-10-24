@@ -10,6 +10,7 @@ import io.circe.Encoder
 import org.java_websocket.client.WebSocketClient
 import org.java_websocket.handshake.ServerHandshake
 import com.sberhack.fun.struct.json._
+import com.sberhack.fun.world.World
 
 class Client(val serverUri: String) extends WebSocketClient(new URI(serverUri)) with LazyLogging {
 
@@ -32,7 +33,9 @@ class Client(val serverUri: String) extends WebSocketClient(new URI(serverUri)) 
             case Right(destinationPoint) =>
               logger.info("Start DestinationPoint logic!")
 
-              // todo DestinationPoint LOGIC
+              World.nextActions.foreach(car =>  {
+                ???
+              })
 
               return // DO NOT DELETE
 
@@ -65,7 +68,7 @@ class Client(val serverUri: String) extends WebSocketClient(new URI(serverUri)) 
               } else {
                 logger.info("Start Traffic logic!")
 
-                // todo: Traffic LOGIC
+                World.updateTraffic(traffic: Traffic)
 
                 return // DO NOT DELETE
               }
@@ -129,7 +132,7 @@ class Client(val serverUri: String) extends WebSocketClient(new URI(serverUri)) 
           if (gameConfigInit != null && routesInit != null && pointsInit != null && trafficInit != null) {
             logger.info("Creating world...")
 
-            // todo CREATE WORLD
+            World.create(gameConfigInit, pointsInit, routesInit, trafficInit)
 
             logger.info("World created!!!")
             isInitialized.set(true)
