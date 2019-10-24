@@ -24,9 +24,8 @@ object World {
   }
 
   def update(traffic: Traffic) = {
-    ???
-    //val worldGraph = updateGraph(traffic)
-    //worldStructure = worldStructure.copy(traffic=traffic)
+    val worldGraph = updateGraph(worldStructure.world, traffic)
+    worldStructure = worldStructure.copy(world=worldGraph)
   }
 
   def update(dp: DestinationPoint) = {
@@ -35,9 +34,8 @@ object World {
 
     nextActions = calculateNextActions(worldStructure)
 
-    val worldGraph = updateGraph(cars)
-    worldStructure = worldStructure.copy(world=worldGraph)
-
+    val worldGraph = updateGraph(worldStructure.world, cars)
+    worldStructure = worldStructure.copy(world=worldGraph, cars=cars)
   }
 
 }

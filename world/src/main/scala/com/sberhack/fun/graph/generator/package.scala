@@ -44,11 +44,11 @@ package object generator {
     Graph.from(pointNodes, nodeEdges)
   }
 
-  def updateGraph(points: Points, traffic: Traffic): Graph[BankNode, WUnDiEdge] = {
+  def updateGraph(graph: Graph[BankNode, WUnDiEdge], traffic: Traffic): Graph[BankNode, WUnDiEdge] = {
     ???
   }
 
-  def updateGraph(cars: Seq[Car]): Graph[BankNode, WUnDiEdge] = {
+  def updateGraph(graph: Graph[BankNode, WUnDiEdge], cars: Seq[Car]): Graph[BankNode, WUnDiEdge] = {
     ???
   }
 
