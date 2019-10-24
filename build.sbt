@@ -16,7 +16,6 @@ lazy val slf4jVersion = "1.7.5"
 val circeVersion = "0.11.1"
 
 
-
 lazy val all = project
   .in(file("."))
   .settings(
@@ -29,7 +28,7 @@ lazy val all = project
 
       )
     )
-  ).aggregate(app, graph, visualisation, algorithm, world)
+  ).aggregate(app, visualisation, world, server)
 
 lazy val app = project
   .in(file("app"))
@@ -42,20 +41,7 @@ lazy val app = project
         "com.typesafe.scala-logging" %% "scala-logging" % scalaLoggingVersion
       )
     )
-  ).dependsOn(graph, struct)
-
-lazy val graph = project
-  .in(file("graph"))
-  .settings(
-    defaultSettings ++ Seq(
-      libraryDependencies ++= Seq(
-        "org.scala-graph" %% "graph-core" % scalaGraphVersion,
-        "org.scala-graph" %% "graph-constrained" % scalaGraphVersion,
-        "org.scala-graph" %% "graph-dot" % scalaGraphDotVersion,
-        "com.github.pureconfig" %% "pureconfig" % pureConfigVersion
-      )
-    )
-  ).dependsOn(car, struct)
+  ).dependsOn(world)
 
 lazy val visualisation = project
   .in(file("visualisation"))
@@ -65,46 +51,22 @@ lazy val visualisation = project
 
       )
     )
-  ).dependsOn(graph)
-
-lazy val algorithm = project
-  .in(file("algorithm"))
-  .settings(
-    defaultSettings ++ Seq(
-      libraryDependencies ++= Seq(
-
-      )
-    )
-  ).dependsOn(graph, visualisation, world)
+  ).dependsOn(world)
 
 lazy val world = project
   .in(file("world"))
   .settings(
     defaultSettings ++ Seq(
       libraryDependencies ++= Seq(
-
-      )
-    )
-  ).dependsOn(graph, visualisation, car, struct, algorithm)
-
-lazy val car = project
-  .in(file("car"))
-  .settings(
-    defaultSettings ++ Seq(
-      libraryDependencies ++= Seq(
-
-      )
-    )
-  ).dependsOn()
-
-lazy val struct = project
-  .in(file("struct"))
-  .settings(
-    defaultSettings ++ Seq(
-      libraryDependencies ++= Seq(
         "io.circe" %% "circe-core" % circeVersion,
         "io.circe" %% "circe-generic" % circeVersion,
-        "io.circe" %% "circe-parser" % circeVersion
+        "io.circe" %% "circe-parser" % circeVersion,
+
+        "org.scala-graph" %% "graph-core" % scalaGraphVersion,
+        "org.scala-graph" %% "graph-constrained" % scalaGraphVersion,
+        "org.scala-graph" %% "graph-dot" % scalaGraphDotVersion,
+
+        "com.github.pureconfig" %% "pureconfig" % pureConfigVersion
       )
     )
   )
@@ -120,7 +82,7 @@ lazy val server = project
         "com.typesafe.scala-logging" %% "scala-logging" % scalaLoggingVersion
       )
     )
-  ).dependsOn(struct)
+  ).dependsOn(world)
 
 resolvers ++= Seq(
   Resolver.sbtPluginRepo("releases"),

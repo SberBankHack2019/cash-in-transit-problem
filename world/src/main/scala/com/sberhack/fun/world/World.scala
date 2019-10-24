@@ -28,7 +28,7 @@ abstract class World {
              routes: Routes,
              traffic: Traffic
             ): Unit = {
-    val cars: Seq[Car] = CalculateNextAction(worldStructure)
+    val cars: Seq[Car] = calculateNextActions(worldStructure)
     val worldGraph = updateGraph(points, traffic)
     worldStructure = World(worldName, config.token, config.level, worldGraph, cars)
   }

@@ -1,7 +1,5 @@
 package com.sberhack.fun.app
 
-import com.sberhack.fun.struct.json._
-
 object App {
 
   val serverAddress = "ws://localhost:1337"
