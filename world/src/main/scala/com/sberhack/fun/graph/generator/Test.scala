@@ -7,10 +7,12 @@ import com.sberhack.fun.struct.responses.{EdgeRoute, EdgeTraffic, GameConfig, Po
 import scalax.collection.Graph
 import scalax.collection.edge.WUnDiEdge
 
+import scala.collection.mutable
+
 object Test extends App {
   val config: GameConfig = GameConfig("12345", List("sb1", "sb2", "sb3", "sb4"), 1)
   val carConfig = CarConfig()
-  val cars: Seq[Car] = config.cars.map(Car(_, 0, carConfig.cashLimitDefault, 0, None))
+  val cars: mutable.Seq[Car] = mutable.Seq(config.cars.map(Car(_, 0, carConfig.cashLimitDefault, 0, None)): _*)
   val points: Points = Points(List(
     VertexPoint(0, 10000),
     VertexPoint(1, 10000),

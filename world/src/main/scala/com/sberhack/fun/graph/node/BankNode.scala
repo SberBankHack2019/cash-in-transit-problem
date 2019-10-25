@@ -1,5 +1,9 @@
 package com.sberhack.fun.graph.node
 
+import com.sberhack.fun.car.Car
+
+import scala.collection.mutable
+
 trait BankNode{
 
   /* Текст в вершинах графа
@@ -11,5 +15,15 @@ trait BankNode{
   protected def vertexText: String
 
   val id: Int
+
+  var cars: mutable.Seq[Car]
+
+  def addCar(car: Car): Unit = {
+    cars = cars :+ car
+  }
+
+  def delCar(car: Car): Unit = {
+    cars = cars.filterNot(_ == car)
+  }
 
 }
