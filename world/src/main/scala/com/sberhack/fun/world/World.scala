@@ -5,6 +5,8 @@ import com.sberhack.fun.graph.generator._
 import com.sberhack.fun.struct.responses.{DestinationPoint, GameConfig, Points, Routes, Traffic}
 import com.sberhack.fun.alg.Algorithm.calculateNextActions
 
+import scala.collection.mutable
+
 object World {
   val defaultCapacity = 50
   val worldName = "My Shiny World"
@@ -20,7 +22,7 @@ object World {
              ): Unit = {
     worldRoutes = routes
     val carConfig = CarConfig()
-    val cars: Seq[Car] = config.cars.map(Car(_, 0, carConfig.cashLimitDefault, 0, None))
+    val cars: mutable.Seq[Car] = config.cars.map(Car(_, 0, carConfig.cashLimitDefault, 0, None))(collection.breakOut)
     val worldGraph = createGraph(config, cars, points, routes, traffic)
     worldStructure = structure.World(worldName, config.token, config.level, worldGraph, cars)
   }
