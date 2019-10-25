@@ -25,36 +25,7 @@ class Client(val serverUri: String) extends WebSocketClient(new URI(serverUri)) 
     logger.debug(s"Got message: $message")
 
     parse(message) match {
-      case Left(ex) =>
-        val jsons = message.split("\n")
-        routesInit = parse(jsons(0)).getOrElse(throw new Exception("Cant parse json routes!"))
-          .as[Routes].getOrElse(throw new Exception("Cant parse routes!"))
-        pointsInit = parse(jsons(1)).getOrElse(throw new Exception("Cant parse json points!"))
-          .as[Points].getOrElse(throw new Exception("Cant parse points!"))
-        trafficInit = parse(jsons(2)).getOrElse(throw new Exception("Cant parse json traffic!"))
-          .as[Traffic].getOrElse(throw new Exception("Cant parse traffic!"))
-
-        if (gameConfigInit != null && routesInit != null && pointsInit != null && trafficInit != null) {
-          logger.info("Creating world...")
-
-          World.create(gameConfigInit, pointsInit, routesInit, trafficInit)
-
-          logger.info("World created!!!")
-
-          World.nextActions.foreach(car => {
-            car.nextMove match {
-              case Some(move) =>
-                val goToMessage = GoTo(move.nodeId, car.name, !move.cashIn)
-                sendMessage(goToMessage)
-              case None =>
-            }
-          })
-
-
-
-          isInitialized.set(true)
-        }
-
+      case Left(ex) => logger.error(s"Cant parse json from server: ${ex.getMessage}", ex)
       case Right(json) =>
 
         if (isInitialized.get) {
@@ -88,55 +59,69 @@ class Client(val serverUri: String) extends WebSocketClient(new URI(serverUri)) 
 
             case Left(_) =>
           }
+        }
 
-          if (!isMessageFound) {
-            json.as[Traffic] match {
-              case Right(traffic) =>
-                if (!isInitialized.get) {
-                  if (trafficInit == null) {
-                    logger.info("Init Traffic!")
-                    trafficInit = traffic
-                  } else {
-                    logger.warn("Duplicate Traffic before Init!!!")
-                  }
-                  isMessageFound = true
+        if (!isMessageFound) {
+          json.as[Traffic] match {
+            case Right(traffic) =>
+              if (!isInitialized.get) {
+                if (trafficInit == null) {
+                  logger.info("Init Traffic!")
+                  trafficInit = traffic
                 } else {
-                  logger.info("Start Traffic logic!")
-
-                  World.update(traffic: Traffic)
-
-                  return // DO NOT DELETE
+                  logger.warn("Duplicate Traffic before Init!!!")
                 }
+                isMessageFound = true
+              } else {
+                logger.info("Start Traffic logic!")
 
-              case Left(_) =>
-            }
+                World.update(traffic: Traffic)
+
+                return // DO NOT DELETE
+              }
+
+            case Left(_) =>
           }
+        }
 
-          if (!isMessageFound) {
-            json.as[Points] match {
-              case Right(points) =>
-                if (!isInitialized.get) {
-                  if (pointsInit == null) {
-                    logger.info("Init Points!")
-                    pointsInit = points
-                  } else {
-                    logger.warn("Duplicate Points before Init!!!")
-                  }
-                  isMessageFound = true
+        if (!isMessageFound) {
+          json.as[Points] match {
+            case Right(points) =>
+              if (!isInitialized.get) {
+                if (pointsInit == null) {
+                  logger.info("Init Points!")
+                  pointsInit = points
                 } else {
-                  logger.info("Start Points logic!")
-
-                  // todo: Points LOGIC
-
-                  return // DO NOT DELETE
+                  logger.warn("Duplicate Points before Init!!!")
                 }
-              case Left(_) =>
-            }
-          }
+                isMessageFound = true
+              } else {
+                logger.info("Start Points logic!")
 
+                // todo: Points LOGIC
+
+                return // DO NOT DELETE
+              }
+            case Left(_) =>
+          }
         }
 
         if (!isInitialized.get) {
+
+          if (!isMessageFound) {
+            json.as[Routes] match {
+              case Right(routes) =>
+                if (routesInit == null) {
+                  logger.info("Init Routes!")
+                  routesInit = routes
+                } else {
+                  logger.warn("Duplicate Routes before Init!!!")
+                }
+                isMessageFound = true
+              case Left(_) =>
+            }
+          }
+
           if (!isMessageFound) {
             json.as[GameConfig] match {
               case Right(gameConfig) =>
@@ -150,6 +135,16 @@ class Client(val serverUri: String) extends WebSocketClient(new URI(serverUri)) 
               case Left(_) =>
             }
           }
+
+          if (gameConfigInit != null && routesInit != null && pointsInit != null && trafficInit != null) {
+            logger.info("Creating world...")
+
+            World.create(gameConfigInit, pointsInit, routesInit, trafficInit)
+
+            logger.info("World created!!!")
+            isInitialized.set(true)
+          }
+
         }
 
         if (!isMessageFound) {
