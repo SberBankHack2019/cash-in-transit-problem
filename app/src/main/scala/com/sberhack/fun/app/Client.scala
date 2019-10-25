@@ -31,8 +31,29 @@ class Client(val serverUri: String) extends WebSocketClient(new URI(serverUri)) 
           .as[Routes].getOrElse(throw new Exception("Cant parse routes!"))
         pointsInit = parse(jsons(1)).getOrElse(throw new Exception("Cant parse json points!"))
           .as[Points].getOrElse(throw new Exception("Cant parse points!"))
-        trafficInit = parse(jsons(1)).getOrElse(throw new Exception("Cant parse json traffic!"))
+        trafficInit = parse(jsons(2)).getOrElse(throw new Exception("Cant parse json traffic!"))
           .as[Traffic].getOrElse(throw new Exception("Cant parse traffic!"))
+
+        if (gameConfigInit != null && routesInit != null && pointsInit != null && trafficInit != null) {
+          logger.info("Creating world...")
+
+          World.create(gameConfigInit, pointsInit, routesInit, trafficInit)
+
+          logger.info("World created!!!")
+
+          World.nextActions.foreach(car => {
+            car.nextMove match {
+              case Some(move) =>
+                val goToMessage = GoTo(move.nodeId, car.name, !move.cashIn)
+                sendMessage(goToMessage)
+              case None =>
+            }
+          })
+
+
+
+          isInitialized.set(true)
+        }
 
       case Right(json) =>
 
@@ -128,21 +149,11 @@ class Client(val serverUri: String) extends WebSocketClient(new URI(serverUri)) 
                 isMessageFound = true
               case Left(_) =>
             }
-
-            if (gameConfigInit != null && routesInit != null && pointsInit != null && trafficInit != null) {
-              logger.info("Creating world...")
-
-              World.create(gameConfigInit, pointsInit, routesInit, trafficInit)
-
-              logger.info("World created!!!")
-              isInitialized.set(true)
-            }
-
           }
+        }
 
-          if (!isMessageFound) {
-            logger.error(s"Message: $message not found!!!")
-          }
+        if (!isMessageFound) {
+          logger.error(s"Message: $message not found!!!")
         }
     }
   }

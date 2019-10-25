@@ -22,6 +22,7 @@ object World {
              ): Unit = {
     worldRoutes = routes
     val carConfig = CarConfig()
+    nextActions = Seq(Car("sb0", 0, carConfig.cashLimitDefault, 0, Option(CarNextMove(2, true))))
     val cars: Seq[Car] = config.cars.map(Car(_, 0, carConfig.cashLimitDefault, 0, None))
     val worldGraph = createGraph(config, mutable.Seq[Car](cars: _*), points, routes, traffic)
     worldStructure = structure.World(worldName, config.token, config.level, worldGraph, cars)
