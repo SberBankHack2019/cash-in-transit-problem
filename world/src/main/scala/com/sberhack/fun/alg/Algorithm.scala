@@ -11,8 +11,9 @@ import scalax.collection.edge.WUnDiEdge
 object Algorithm  {
 
   type Path = Seq[BankNode]
-  type WeightedPath = Seq[(BankNode, BankNode, Double)]
+  type WeightedPath = Seq[(BankNode, Double)]
 
+  @deprecated
   private[alg] def genPossibleRoutes(graph: Graph[BankNode, WUnDiEdge], currentNode: BankNode): Seq[(BankNode, Path)] = {
 
     val nodes = graph.nodes.map(_.toOuter).filterNot(_ == currentNode)
@@ -24,41 +25,48 @@ object Algorithm  {
     }.toSeq
   }
 
+  @deprecated
   private[alg] def filterNotNode(graph: Graph[BankNode, WUnDiEdge], currentNode: BankNode): Graph[BankNode, WUnDiEdge] = {
     graph - (graph get currentNode)
   }
 
+  @deprecated
+  private[alg] def genWeightedRoutes(graph: Graph[BankNode, WUnDiEdge], currentNode: BankNode): Seq[WeightedPath] = {
 
-  private[alg] def genPossibleRoutes2(graph: Graph[BankNode, WUnDiEdge], currentNode: BankNode): Seq[WeightedPath] = {
+    val edgesFromStart: Seq[WUnDiEdge[BankNode]] = graph.edges.toOuter.filter{
+      case WUnDiEdge(from, _, _) => from == currentNode
+    }.toSeq
 
-    val edges: Seq[WUnDiEdge[BankNode]] = filterNotNode(graph, currentNode).edges.toOuter.toSeq
+    val edgesWithoutStart: Seq[WUnDiEdge[BankNode]] = filterNotNode(graph, currentNode).edges.toOuter.toSeq
 
-    edges.map { e =>
-      edges.filterNot(_ == e).collect {
-        case WUnDiEdge(from, to, weight) => (from, to, weight)
-      }
+    edgesFromStart.map {
+      case WUnDiEdge(_, to, weight) => (to, weight)
+    }.flatMap { e =>
+      edgesWithoutStart.collect {
+        case WUnDiEdge(from, to, weight) if from == e._1 => (to, weight)
+        case WUnDiEdge(from, to, weight) if to == e._1   => (from, weight)
+      }.map{q => Seq(e, q)}
     }
   }
 
-  private[alg] def naiveAlgorythm(graph: Graph[BankNode, WUnDiEdge], currentNode: BankNode, cashLimit: Double): Option[(Int, Double)] = {
+  private[alg] def naiveAlgorithm(graph: Graph[BankNode, WUnDiEdge], currentNode: BankNode, cashLimit: Double): Option[(Int, Double)] = {
     val possibleWays = graph.edges.toOuter.collect{
       case WUnDiEdge(from, to, weight) if from == currentNode => (to, weight)
     }.collect{
      case (point: Point, weight) if point.getData.money < cashLimit => point.getData -> point.getData.money / weight
-    }
+    }.toSeq
 
       possibleWays match {
-        case Seq() => None
-        case ways =>
-        val pnt =  ways.maxBy{ case (_, value) => value }._1
+        case Nil => None
+        case ways => {
+          val pnt =  ways.maxBy{ case (_, value) => value }._1
           Some((pnt.id, pnt.timeRemain))
+        }
       }
-
-
 
   }
 
-
+  @deprecated
   private[alg] def findBestPath(paths: Seq[Path], function: Path => Double): BankNode = {
     paths.map(q => (q.head, function(q))).minBy { case (firstNodeInPath, pathValue) =>
       (pathValue, firstNodeInPath.toString)
@@ -78,7 +86,7 @@ object Algorithm  {
       case Seq() => Seq() // Нет машин которым нечего делать
       case cars => cars.map{ car =>
         val currentNode = getNodeById(world, car.currentNodeId)
-        val nextStepInfo = naiveAlgorythm(world.world, currentNode, car.cashLimit)
+        val nextStepInfo = naiveAlgorithm(world.world, currentNode, car.cashLimit)
 
         nextStepInfo match {
           case Some((goTo, travelTime)) =>
