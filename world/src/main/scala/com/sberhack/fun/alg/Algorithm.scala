@@ -1,11 +1,12 @@
 package com.sberhack.fun.alg
 
 import com.sberhack.fun.car.{Car, CarNextMove}
-import com.sberhack.fun.graph.node.{BankNode, Point}
+import com.sberhack.fun.graph.node.{BankNode, Point, PointData}
 import com.sberhack.fun.world.structure.World
 import scalax.collection.Graph
 import scalax.collection.edge.WUnDiEdge
 
+import scala.math.abs
 import scala.util.{Random, Try}
 
 object Algorithm  {
@@ -50,17 +51,32 @@ object Algorithm  {
   }
 
   private def randomAlgorithm(graph: Graph[BankNode, WUnDiEdge], currentNode: BankNode, cashLimit: Double): Option[(Int, Double)] = {
-    Some(
-      Random.nextInt %
-        graph.nodes.toOuter
-          .filter(node => Try(node.asInstanceOf[Point].getData.money > 0).toOption.getOrElse(false))
-          .filter(node => Try(
-            node.asInstanceOf[Point].getData.carCashIn match {
-              case Some(_) => false
-              case _ => true
-            }).toOption.getOrElse(false))
-          .map(node => node.cars).reduce(_ ++ _).size,
-      8 * 60)
+    val nodes: Seq[PointData] =
+      graph.nodes.toOuter
+        .filter(node => Try(node.asInstanceOf[Point].getData.money > 0).toOption.getOrElse(false))
+        .filter(node => Try(
+          node.asInstanceOf[Point].getData.carCashIn match {
+            case Some(_) => false
+            case _ => true
+          }).toOption.getOrElse(false))
+        .map(node => node.asInstanceOf[Point].getData).toSeq
+
+    val id = abs(Random.nextInt) % nodes.length + 1
+
+    val timeRemain = abs(Random.nextInt) % 40 match {
+      case 0 => 0.0
+      case _ => graph.nodes.toOuter.find(_.id == id) match {
+        case Some(node) => Try(node.asInstanceOf[Point].getData.timeRemain).toOption.getOrElse(0.0)
+        case _ => 0.0
+      }
+    }
+
+    val result = abs(Random.nextInt) % 3 match {
+      case 0 => None
+      case _ => Some((id, timeRemain))
+    }
+
+    result
   }
 
   private[alg] def naiveAlgorithm(graph: Graph[BankNode, WUnDiEdge], currentNode: BankNode, cashLimit: Double): Option[(Int, Double)] = {
