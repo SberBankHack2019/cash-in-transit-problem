@@ -16,38 +16,67 @@ package object generator {
                   points: Points,
                   routes: Routes,
                   traffic: Traffic): Graph[BankNode, WUnDiEdge] = {
+    // create Start
+    val startNode: Start = createStartNode(cars)
+
+    // create Vault
+    val vaultNode: Vault = createVaultNode(cars)
+
     //create Nodes
     val pointNodes: Seq[BankNode] =
-      createPointNodes(cars, PointConfig(), points)
+      createPointNodes(cars, startNode, vaultNode, PointConfig(), points)
+
+    println("CARS:")
+    cars.foreach(car => println(s"Car: ${car.name}, ${car.cash}, ${car.currentNodeId}, ${car.nextMove}"))
+    println()
+
+    println("NODES:")
+    pointNodes
+      .filter(node => cars.intersect(node.cars).nonEmpty)
+      .foreach(node => println(s"Node: ${node.id}, ${node.cars.mkString("\n")}"))
+    println()
 
     //create Edges
     val nodeEdges: Seq[WUnDiEdge[BankNode]] =
-      createNodeEdges(cars, routes, traffic, pointNodes)
+      createNodeEdges(cars, startNode, vaultNode, routes, traffic, pointNodes)
+
+    println("EDGES:")
+    nodeEdges
+      .filter(edge =>
+        cars.intersect(edge.toSeq.map(_.cars).reduce(_ ++_)).nonEmpty)
+      .foreach(edge => println(s"Edge: ${edge.weight.toLong}, ${edge.toSeq.mkString("\n")}"))
+    println()
 
     Graph.from(pointNodes, nodeEdges)
   }
 
   def createStartNode(cars: mutable.Seq[Car]): Start = Start(StartData(0, cars))
-  def createVaultNode(cars: mutable.Seq[Car]): Vault = Vault(VaultData(1, 0, cars))
+  def createVaultNode(cars: mutable.Seq[Car]): Vault = Vault(VaultData(1, 0, mutable.Seq.empty[Car]))
 
   def createPointNode(pointConfig: PointConfig, point: VertexPoint): Point =
     Point(PointData(point.p, point.money, None, mutable.Seq.empty[Car], pointConfig.timeRemainDefault))
 
-  def createPointNodes(cars: mutable.Seq[Car], pointConfig: PointConfig, points: Points): Seq[BankNode] =
+  def createPointNodes(cars: mutable.Seq[Car],
+                       start: Start,
+                       vault: Vault,
+                       pointConfig: PointConfig,
+                       points: Points): Seq[BankNode] =
     points.points
       .map{ point: VertexPoint => point.p match {
-          case 0 => createStartNode(cars)
-          case 1 => createVaultNode(cars)
+          case 0 => start
+          case 1 => vault
           case _ => createPointNode(pointConfig, point)
         }
       }
 
   def createNodeEdges(cars: mutable.Seq[Car],
+                      start: Start,
+                      vault: Vault,
                       routes: Routes,
                       traffic: Traffic,
                       nodes: Seq[BankNode]): Seq[WUnDiEdge[BankNode]] = {
-    val startNode: BankNode = createStartNode(cars)
-    val vaultNode: BankNode = createVaultNode(cars)
+    val startNode: BankNode = start
+    val vaultNode: BankNode = vault
 
     routes.routes
       .map { route: EdgeRoute =>
@@ -70,9 +99,39 @@ package object generator {
     val pointNodes: Seq[BankNode] = graph.nodes.toOuter.toSeq
     val pointNodesUpdated = updatePointNodes(pointNodes, car)
 
+    println("CARS:")
+    Seq(car).foreach(car => println(s"Car: ${car.name}, ${car.cash}, ${car.currentNodeId}, ${car.nextMove}"))
+    println()
+
+    println("NODES:")
+    pointNodes
+      .filter(node => node.cars.intersect(Seq(car)).nonEmpty)
+      .foreach(node => println(s"Node: ${node.id}, ${node.cars.mkString("\n")}"))
+    println()
+
+    println("NODES UPDATED:")
+    pointNodesUpdated
+      .filter(node => node.cars.intersect(Seq(car)).nonEmpty)
+      .foreach(node => println(s"Node: ${node.id}, ${node.cars.mkString("\n")}"))
+    println()
+
     //update Edges
     val nodeEdges: Seq[WUnDiEdge[BankNode]] = graph.edges.toOuter.toSeq
     val nodeEdgesUpdated = updateNodeEdges(pointNodes, nodeEdges, car)
+
+    println("EDGES:")
+    nodeEdges
+      .filter(edge =>
+        edge.toSeq.map(_.cars).reduce(_ ++_).intersect(Seq(car)).nonEmpty)
+      .foreach(edge => println(s"Edge: ${edge.weight.toLong}, ${edge.toSeq.mkString("\n")}"))
+    println()
+
+    println("EDGES UPDATED:")
+    nodeEdgesUpdated
+      .filter(edge =>
+        edge.toSeq.map(_.cars).reduce(_ ++_).intersect(Seq(car)).nonEmpty)
+      .foreach(edge => println(s"Edge: ${edge.weight.toLong}, ${edge.toSeq.mkString("\n")}"))
+    println()
 
     Graph.from(pointNodesUpdated, nodeEdgesUpdated)
   }
@@ -156,7 +215,26 @@ package object generator {
   }
 
   def getRouteByNodes(node1: BankNode, node2: BankNode, routes: Routes): EdgeRoute = {
-    routes.routes.find(route => route.a == node1.id & route.b == node2.id).get
+    println("############################################################")
+    println(s"node1=$node1")
+    println(s"node2=$node2")
+    println(s"Routes:")
+    routes.routes
+      .filter(r =>
+        (r.a == node1.id && r.b == node2.id)
+          || (r.b == node1.id & r.a == node2.id)
+      )
+      .foreach(r => println(s"route=$r"))
+
+    println("############################################################")
+
+    routes.routes.find(route =>
+      (route.a == node1.id && route.b == node2.id)
+      || (route.b == node1.id && route.a == node2.id)
+    ) match {
+      case Some(route) => route
+      case _ => ???
+    }
   }
 
   def updateNodeEdges(nodes: Seq[BankNode],
@@ -268,7 +346,11 @@ package object generator {
   ))
 
   def getMaybeJam(route: EdgeRoute, traffic: Traffic): Option[Double] = {
-    traffic.traffic.find(edge => edge.a == route.a & edge.b == route.b).map(_.jam.toDouble)
+    traffic.traffic
+      .find(edge =>
+        (edge.a == route.a & edge.b == route.b)
+          || (edge.b == route.a & edge.a == route.b)
+      ).map(_.jam.toDouble)
   }
 
   def getJam(route: EdgeRoute, traffic: Traffic): Double = {

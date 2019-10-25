@@ -38,4 +38,20 @@ object Test extends App {
   graph.edges.foreach(edge => println(s"edge: $edge"))
 
   saveDotFile("graph", graph.toDotConfigured)
+
+  val trafficNew: Traffic = Traffic(List(
+    EdgeTraffic(0, 1, "2.0"),
+    EdgeTraffic(1, 2, "1.7"),
+    EdgeTraffic(2, 0, "1.7")
+  ))
+
+  val graphNew: Graph[BankNode, WUnDiEdge] = updateGraph(
+    graph, routes, trafficNew
+  )
+
+  println(s"Graph size: ${graphNew.graphSize}")
+  graphNew.nodes.foreach(node => println(s"node: $node"))
+  graphNew.edges.foreach(edge => println(s"edge: $edge"))
+
+  saveDotFile("graphNew", graphNew.toDotConfigured)
 }
