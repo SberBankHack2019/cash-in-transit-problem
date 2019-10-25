@@ -1,12 +1,12 @@
 package com.sberhack.fun.alg
 
 import com.sberhack.fun.car.{Car, CarNextMove}
-import com.sberhack.fun.graph.node.{BankNode, Point, Start, Vault}
+import com.sberhack.fun.graph.node.{BankNode, Point}
 import com.sberhack.fun.world.structure.World
-import com.sberhack.fun.alg.functions._
 import scalax.collection.Graph
 import scalax.collection.edge.WUnDiEdge
 
+import scala.util.{Random, Try}
 
 object Algorithm  {
 
@@ -49,6 +49,20 @@ object Algorithm  {
     }
   }
 
+  private def randomAlgorithm(graph: Graph[BankNode, WUnDiEdge], currentNode: BankNode, cashLimit: Double): Option[(Int, Double)] = {
+    Some(
+      Random.nextInt %
+        graph.nodes.toOuter
+          .filter(node => Try(node.asInstanceOf[Point].getData.money > 0).toOption.getOrElse(false))
+          .filter(node => Try(
+            node.asInstanceOf[Point].getData.carCashIn match {
+              case Some(_) => false
+              case _ => true
+            }).toOption.getOrElse(false))
+          .map(node => node.cars).reduce(_ ++ _).size,
+      8 * 60)
+  }
+
   private[alg] def naiveAlgorithm(graph: Graph[BankNode, WUnDiEdge], currentNode: BankNode, cashLimit: Double): Option[(Int, Double)] = {
     val possibleWays = graph.edges.toOuter.collect{
       case WUnDiEdge(from, to, weight) if from == currentNode => (to, weight)
@@ -86,7 +100,8 @@ object Algorithm  {
       case Seq() => Seq() // Нет машин которым нечего делать
       case cars => cars.map{ car =>
         val currentNode = getNodeById(world, car.currentNodeId)
-        val nextStepInfo = naiveAlgorithm(world.world, currentNode, car.cashLimit)
+//        val nextStepInfo = naiveAlgorithm(world.world, currentNode, car.cashLimit)
+        val nextStepInfo = randomAlgorithm(world.world, currentNode, car.cashLimit)
 
         nextStepInfo match {
           case Some((goTo, travelTime)) =>
