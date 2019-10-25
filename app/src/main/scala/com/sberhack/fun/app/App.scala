@@ -2,7 +2,7 @@ package com.sberhack.fun.app
 
 object App {
 
-  val serverAddress = "ws://localhost:1337"
+  val serverAddress = "http://localhost:8080/race"
 
   def main(args: Array[String]): Unit = {
     val client = Client(serverAddress)

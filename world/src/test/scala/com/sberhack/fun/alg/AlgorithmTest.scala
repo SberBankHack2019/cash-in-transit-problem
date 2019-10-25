@@ -10,7 +10,7 @@ import TestGraph._
 
 class AlgorithmTest extends AnyFreeSpec with Matchers {
 
-  "Algorithm" - {
+  /*"Algorithm" - {
 
     val car1 = Car("car1", 10, 10, 10, Some(CarNextMove(1, true)))
     val car2 = Car("car2", 10, 10, 10, Some(CarNextMove(2, false)))
@@ -56,5 +56,7 @@ class AlgorithmTest extends AnyFreeSpec with Matchers {
     }
 
   }
+  */
+
 
 }

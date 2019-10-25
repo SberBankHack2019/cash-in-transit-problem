@@ -169,6 +169,7 @@ class Client(val serverUri: String) extends WebSocketClient(new URI(serverUri)) 
 
   override def onOpen(handshakedata: ServerHandshake): Unit = {
     logger.info("Connection open!")
+    sendMessage(Init())
   }
 
   override def onClose(code: Int, reason: String, remote: Boolean): Unit = {
