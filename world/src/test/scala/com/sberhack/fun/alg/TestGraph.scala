@@ -11,7 +11,7 @@ import scala.collection.mutable
 
 object TestGraph {
 
-  val carAtStart = Car("car1", 0, 10000, 0, None)
+  /*val carAtStart = Car("car1", 0, 10000, 0, None)
 
   val start: Start = Start(StartData(0, mutable.Seq(carAtStart)))
   val node1: Point = Point(PointData(2, 20, None, mutable.Seq(), 100))
@@ -67,5 +67,5 @@ object TestGraph {
   def easyTestFunction(path: Path): Double = {
     path.collect{ case p: Point => p.getData.money }.sum
   }
-
+*/
 }
