@@ -142,6 +142,15 @@ class Client(val serverUri: String) extends WebSocketClient(new URI(serverUri)) 
             World.create(gameConfigInit, pointsInit, routesInit, trafficInit)
 
             logger.info("World created!!!")
+
+            World.nextActions.foreach(car => {
+              car.nextMove match {
+                case Some(move) =>
+                  val goToMessage = GoTo(move.nodeId, car.name, !move.cashIn)
+                  sendMessage(goToMessage)
+                case None =>
+              }
+            })
             isInitialized.set(true)
           }
 

@@ -1,6 +1,6 @@
 package com.sberhack.fun.graph.generator
 
-import com.sberhack.fun.car.{Car, CarConfig}
+import com.sberhack.fun.car.{Car, CarConfig, CarNextMove}
 import com.sberhack.fun.graph.dot._
 import com.sberhack.fun.graph.node.BankNode
 import com.sberhack.fun.struct.responses.{EdgeRoute, EdgeTraffic, GameConfig, Points, Routes, Traffic, VertexPoint}
@@ -34,8 +34,8 @@ object Test extends App {
   )
 
   println(s"Graph size: ${graph.graphSize}")
-  graph.nodes.foreach(node => println(s"node: $node"))
-  graph.edges.foreach(edge => println(s"edge: $edge"))
+  graph.nodes.foreach(node => println(s"CREATE node: $node"))
+  graph.edges.foreach(edge => println(s"CREATE edge: ${edge.weight.toLong}, $edge"))
 
   saveDotFile("graph", graph.toDotConfigured)
 
@@ -45,13 +45,21 @@ object Test extends App {
     EdgeTraffic(2, 0, "1.7")
   ))
 
-  val graphNew: Graph[BankNode, WUnDiEdge] = updateGraph(
+  val carNew: Car = Car("sb1", 0.0, carConfig.cashLimitDefault, 2, Some(CarNextMove(2, true)))
+
+  //update trafficNew
+  val graphNew1: Graph[BankNode, WUnDiEdge] = updateGraph(
     graph, routes, trafficNew
   )
 
-  println(s"Graph size: ${graphNew.graphSize}")
-  graphNew.nodes.foreach(node => println(s"node: $node"))
-  graphNew.edges.foreach(edge => println(s"edge: $edge"))
+  //update car
+  val graphNew2: Graph[BankNode, WUnDiEdge] = updateGraph(
+    graphNew1, carNew
+  )
 
-  saveDotFile("graphNew", graphNew.toDotConfigured)
+  println(s"Graph size: ${graphNew2.graphSize}")
+  graphNew2.nodes.foreach(node => println(s"UPDATE node: $node"))
+  graphNew2.edges.foreach(edge => println(s"UPDATE edge: ${edge.weight.toLong}, $edge"))
+
+  saveDotFile("graphNew", graphNew2.toDotConfigured)
 }
