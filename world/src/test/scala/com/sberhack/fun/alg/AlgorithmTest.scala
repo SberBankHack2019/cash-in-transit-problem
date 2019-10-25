@@ -43,11 +43,18 @@ class AlgorithmTest extends AnyFreeSpec with Matchers {
   }
 
   "AA" - {
-   // genPossibleRoutes2(graph, start).foreach(println)
+    genWeightedRoutes(graph, start).foreach(println)
   }
 
   "naiveAlgo" - {
-   naiveAlgorythm(graph, start, 1000) shouldBe Some((node2.getData.id, node2.getData.timeRemain))
+    "Should return best Node if everything is ok" - {
+      naiveAlgorithm(graph, start, 1000) shouldBe Some((node2.getData.id, node2.getData.timeRemain))
+    }
+
+    "Return None if there is no space for money" - {
+      naiveAlgorithm(graph, start, 0) shouldBe None
+    }
+
   }
 
 }
