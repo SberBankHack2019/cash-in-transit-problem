@@ -32,8 +32,20 @@ object TestGraph {
     (start ~% vault)(60)
   )
 
+  val nodesWithoutStart: Seq[BankNode] = Seq(node1, node2, node3, vault)
+
+  val edgesWithoutStart: Seq[WUnDiEdge[BankNode]] = Seq(
+    (node1 ~% vault)(30),
+    (node2 ~% vault)(70),
+    (node3 ~% vault)(10),
+    (node1 ~% node2)(15),
+    (node2 ~% node3)(20),
+    (node1 ~% node3)(10)
+  )
+
 
   val graph = Graph.from(nodes, edges)
+  val graphWithoutStart = Graph.from(nodesWithoutStart, edgesWithoutStart)
 
   val allTwoDepthPaths: Seq[(BankNode, Path)] = Seq(
     (node1, Seq(node1, node2)), // 70
