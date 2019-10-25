@@ -43,7 +43,7 @@ class AlgorithmTest extends AnyFreeSpec with Matchers {
   }
 
   "AA" - {
-    genWeightedRoutes(graph, start).foreach(println)
+//    genWeightedRoutes(graph, start).foreach(println)
   }
 
   "naiveAlgo" - {

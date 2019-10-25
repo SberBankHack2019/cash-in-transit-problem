@@ -7,15 +7,17 @@ import scalax.collection.Graph
 import scalax.collection.edge.WUnDiEdge
 import scalax.collection.edge.Implicits._
 
+import scala.collection.mutable
+
 object TestGraph {
 
   /*val carAtStart = Car("car1", 0, 10000, 0, None)
 
-  val start: Start = Start(StartData(0, Seq(carAtStart)))
-  val node1: Point = Point(PointData(2, 20, None, Seq(), 100))
-  val node2: Point = Point(PointData(3, 50, None, Seq(), 100))
-  val node3: Point = Point(PointData(4, 40, None, Seq(), 100))
-  val vault: Vault = Vault(VaultData(1, 0, Seq()))
+  val start: Start = Start(StartData(0, mutable.Seq(carAtStart)))
+  val node1: Point = Point(PointData(2, 20, None, mutable.Seq(), 100))
+  val node2: Point = Point(PointData(3, 50, None, mutable.Seq(), 100))
+  val node3: Point = Point(PointData(4, 40, None, mutable.Seq(), 100))
+  val vault: Vault = Vault(VaultData(1, 0, mutable.Seq()))
 
   val nodes: Seq[BankNode] = Seq(start, node1, node2, node3, vault)
 
