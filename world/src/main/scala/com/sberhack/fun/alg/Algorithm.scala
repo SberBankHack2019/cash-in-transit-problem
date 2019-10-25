@@ -76,6 +76,8 @@ object Algorithm  {
       case _ => Some((id, timeRemain))
     }
 
+    println(s"Going to Point: $id timeRemainig: $timeRemain")
+
     result
   }
 

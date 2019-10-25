@@ -215,18 +215,15 @@ package object generator {
   }
 
   def getRouteByNodes(node1: BankNode, node2: BankNode, routes: Routes): EdgeRoute = {
-    println("############################################################")
-    println(s"node1=$node1")
-    println(s"node2=$node2")
-    println(s"Routes:")
-    routes.routes
-      .filter(r =>
-        (r.a == node1.id && r.b == node2.id)
-          || (r.b == node1.id & r.a == node2.id)
-      )
-      .foreach(r => println(s"route=$r"))
-
-    println("############################################################")
+//    println(s"node1=$node1")
+//    println(s"node2=$node2")
+//    println(s"Routes:")
+//    routes.routes
+//      .filter(r =>
+//        (r.a == node1.id && r.b == node2.id)
+//          || (r.b == node1.id & r.a == node2.id)
+//      )
+//      .foreach(r => println(s"route=$r"))
 
     routes.routes.find(route =>
       (route.a == node1.id && route.b == node2.id)
